@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,22 +18,27 @@ class SortieController extends AbstractController
     public function add(EntityManagerInterface $em, Request $request): Response
     {
         $sortie = new Sortie();
-
         $sortieAddForm = $this->createForm(SortieType::class, $sortie);
-
         $sortieAddForm->handleRequest($request);
 
-        if($sortieAddForm ->isSubmitted() && $sortieAddForm->isValid()){
-            $em ->getDoctrine() ->getManager() ->persist($sortie);
-            $em ->getDoctrine() ->getManager() ->flush();
+        if ($sortieAddForm->isSubmitted() && $sortieAddForm->isValid()) {
+            dump($sortie);
+            $em->persist($sortie);
+            $em->flush();
 
-            $this->addFlash((success, 'La sortie a bien été créée'));
-            return $this->redirectToRoute(home.html.twig);
+            $this->addFlash('success', 'La sortie a bien été créée');
+            return $this->redirectToRoute("sortie_list");
         }
-
-
         return $this->render('sortie/add.html.twig', [
-            "sortieAddForm" =>$sortieAddForm->createView()
+            "sortieAddForm" => $sortieAddForm->createView()
         ]);
     }
+    /**
+     * @Route("sortie/list", name="sortie_list")
+     */
+    public function list(): Response
+    {
+        return $this->render('sortie/list.html.twig',[]);
+    }
 }
+

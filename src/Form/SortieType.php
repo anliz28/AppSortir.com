@@ -24,7 +24,6 @@ class SortieType extends AbstractType
             ->add('etat')
         ;
     }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

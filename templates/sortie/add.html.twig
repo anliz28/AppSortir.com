@@ -8,6 +8,26 @@
     <title>Ajouter une sortie !</title>
 </head>
 <body>
-<h1>Ajouter une sortie de votre cru</h1>
+    <h1>Ajouter une sortie de votre cru</h1>
+        <div class="formulaire">
+            {{ form_start(sortieAddForm) }}
+
+            {{ form_row(sortieAddForm.nom) }}
+            {{ form_row(sortieAddForm.dateDebut) }}
+            {{ form_row(sortieAddForm.dateCloture) }}
+            {{ form_row(sortieAddForm.nbInscriptionsMax) }}
+            {{ form_row(sortieAddForm.duree) }}
+            {{ form_row(sortieAddForm.infosSortie) }}
+            {{ form_row(sortieAddForm.dateCloture) }}
+            {{ form_row(sortieAddForm.lieu) }}
+            {{ form_row(sortieAddForm.etat) }}
+            {{ form_row(sortieAddForm.organisateur) }}
+            {{ form_row(sortieAddForm.etatSortie) }}
+
+
+            <button type="submit">Créer une sortie</button>
+
+            {{ form_end(sortieAddForm) }}
+        </div>
 </body>
 </html>
