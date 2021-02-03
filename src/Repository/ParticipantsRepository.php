@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Participants;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Participants|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Participants[]    findAll()
  * @method Participants[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ParticipantsRepository extends ServiceEntityRepository
+class ParticipantsRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -47,4 +48,19 @@ class ParticipantsRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function loadUserByUsername($pseudoOrEmail)
+    {
+
+        $entityManager = $this->getEntityManager();
+
+        return $entityManager->createQuery(
+            'SELECT u
+                FROM App\Entity\Participants u
+                WHERE u.pseudo = :query
+                OR u.mail = :query'
+        )
+            ->setParameter('query', $pseudoOrEmail)
+            ->getOneOrNullResult();
+    }
 }

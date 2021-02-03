@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\ParticipantsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ParticipantsRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -49,7 +49,7 @@ class Participants implements UserInterface
     private $mail;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank
      */
     private $mot_de_passe;
