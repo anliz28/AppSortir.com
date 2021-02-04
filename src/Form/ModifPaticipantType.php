@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\Participants;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -18,7 +20,14 @@ class ModifPaticipantType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('mail');
+            ->add('mail')
+            ->add('campus', EntityType::class,
+                ['class'=> Campus::class,
+                    'choice_label' => function ($campus) {
+                        return $campus->getNomCampus();
+                    }
+                ]);
+
 
         ;
     }

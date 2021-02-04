@@ -22,7 +22,6 @@ class ParticipantsController extends AbstractController
      */
     public function readProfil()
     {
-
         return $this->render('participants/profil.html.twig', ['participant' => $this->getUser()]);
     }
 
