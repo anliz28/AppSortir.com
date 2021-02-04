@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil participant{% endblock %}
+
+{% block main %}
+
+   <div><p>Pseudo: {{ participant.pseudo }}</p></div>
+    <div><p>Nom: {{ participant.nom }}<p></div>
+    <div><p>Prenom: {{ participant.prenom }}<p></div>
+    <div><p>Téléphone: {{ participant.telephone }}<p></div>
+    <div><p>Email: {{ participant.mail }}<p></div>
+
+    <a href="{{ path('modifProfil') }}">Modifier profil</a>
+
+{% endblock %}

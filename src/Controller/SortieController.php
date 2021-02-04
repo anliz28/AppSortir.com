@@ -22,7 +22,7 @@ class SortieController extends AbstractController
         $sortieAddForm->handleRequest($request);
 
         if ($sortieAddForm->isSubmitted() && $sortieAddForm->isValid()) {
-            dump($sortie);
+
             $em->persist($sortie);
             $em->flush();
 

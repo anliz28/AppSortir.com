@@ -1,9 +1,9 @@
-
 {% extends 'base.html.twig' %}
+
 {% block title %}{% endblock %}
 
 {% block main %}
-    <h1>Ajouter une sortie de votre cru</h1>
+    <h1>Ajouter une sortie de votre choix</h1>
         <div class="formulaire">
             {{ form_start(sortieAddForm) }}
 
@@ -20,7 +20,7 @@
             {{ form_row(sortieAddForm.etatSortie) }}
 
 
-            <button type="submit">Créer une sortie</button>
+            <button class="btn btn-success" type="submit">Créer une sortie</button>
 
             {{ form_end(sortieAddForm) }}
         </div>

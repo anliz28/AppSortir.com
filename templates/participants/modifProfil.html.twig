@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profile{% endblock %}
+
+{% block main %}
+
+    <fieldset>
+        {{ form_start(modifForm) }}
+        {{ form_widget(modifForm) }}
+        <button class="btn btn-success" type="submit">Valider la modification</button>
+        <button class="btn btn-danger" type="reset">Annuler la modification</button>
+        {{ form_end(modifForm) }}
+
+    </fieldset>
+
+
+
+{% endblock %}

@@ -1,2 +1,12 @@
 {% extends 'base.html.twig' %}
 
+
+{% block title %}Acceuil{% endblock %}
+
+{% block main %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <h2>{{ participant.pseudo }} connecté</h2>
+    {% endif %}
+
+{% endblock %}
