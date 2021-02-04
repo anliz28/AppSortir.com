@@ -64,6 +64,12 @@ class Participants implements UserInterface
      */
     private $actif;
 
+    /**
+     * @var Campus
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campus")
+     */
+    private $campus;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -195,4 +201,22 @@ class Participants implements UserInterface
     {
         // TODO: Implement eraseCredentials() method.
     }
+
+    /**
+     * @return Campus
+     */
+    public function getCampus(): Campus
+    {
+        return $this->campus;
+    }
+
+    /**
+     * @param Campus $campus
+     */
+    public function setCampus(Campus $campus): self
+    {
+        $this->campus = $campus;
+        return $this;
+    }
+
 }
