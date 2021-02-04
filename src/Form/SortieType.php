@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Etats;
 use App\Entity\Sortie;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,7 +23,12 @@ class SortieType extends AbstractType
             ->add('etatSortie')
             ->add('organisateur')
             ->add('lieu')
-            ->add('etat')
+            ->add('etat', EntityType::class,
+                ['class'=> Etats::class,
+                    'choice_label' => function ($etat) {
+                        return $etat->getLibelle();
+                    }
+                ]);
         ;
     }
     public function configureOptions(OptionsResolver $resolver)
