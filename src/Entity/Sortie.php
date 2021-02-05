@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -47,19 +48,19 @@ class Sortie
      * @ORM\Column(type="text", nullable=true)
      */
     private $infosSortie;
-
+    //mise en place d'une relation OneToOne en unidirectionnel avec l'entité Particpants
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $etatSortie;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\OneToOne(targetEntity="App\Entity\Participants")
      */
     private $organisateur;
 
+    public function __construct()
+    {
+        $this->participants = new ArrayCollection();
+    }
+
     /**
-     * @ORM\Column (type="string", length=120)
+     *      * @ORM\Column (type="string", length=120)
      */
     private $lieu;
 
@@ -146,18 +147,6 @@ class Sortie
         return $this;
     }
 
-    public function getEtatSortie(): ?int
-    {
-        return $this->etatSortie;
-    }
-
-    public function setEtatSortie(?int $etatSortie): self
-    {
-        $this->etatSortie = $etatSortie;
-
-        return $this;
-    }
-
     /**
      * @return mixed
      */
@@ -169,7 +158,7 @@ class Sortie
     /**
      * @param mixed $organisateur
      */
-    public function setOrganisateur($organisateur)
+    public function setOrganisateur($organisateur): void
     {
         $this->organisateur = $organisateur;
     }
