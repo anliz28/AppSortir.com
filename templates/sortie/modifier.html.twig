@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de la sortie{% endblock %}
+
+{% block main %}
+    <h2>Modifier une sortie</h2>
+
+    {{ form_start(sortieModifForm) }}
+    {{ form_widget(sortieModifForm) }}
+    <button type="submit">Modifier</button>
+    {{ form_start(sortieModifForm) }}
+
+
+
+
+
+    <br>
+    <a href="{{path('sortie_publier',{'id':sortie.id})}}">Publier la sortie</a>
+    <br>
+    <a href="{{path('sortie_annuler',{'id':sortie.id})}}">Annuler la sortie</a>
+    <br>
+    <a href="{{path('home')}}">Annuler</a>
+
+
+
+
+
+
+{% endblock %}
+

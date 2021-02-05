@@ -20,8 +20,6 @@ class SortieType extends AbstractType
             ->add('dateCloture')
             ->add('nbInscriptionsMax')
             ->add('infosSortie')
-            ->add('etatSortie')
-            ->add('organisateur')
             ->add('lieu')
             ->add('etat', EntityType::class,
                 ['class'=> Etats::class,
