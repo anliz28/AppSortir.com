@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 /**
@@ -68,6 +71,19 @@ class Sortie
      * @ORM\ManyToOne(targetEntity="App\Entity\Etats")
      */
     private $etat;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Inscriptions::class, mappedBy="sortie")
+     */
+    private $inscriptions;
+
+
+
+    public function __construct()
+    {
+        $this->inscriptions = new ArrayCollection();
+    }
+
 
 
     public function getId(): ?int
@@ -205,6 +221,37 @@ class Sortie
     public function setEtat($etat)
     {
         $this->etat = $etat;
+    }
+
+    /**
+     * @return Collection|Inscriptions[]
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+
+    public function addInscription(Inscriptions $inscription): self
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions[] = $inscription;
+            $inscription->setInscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscriptions $inscription): self
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getDateInscription() === $this) {
+                $inscription->setDateInscription(null);
+            }
+        }
+
+        return $this;
     }
 
 }

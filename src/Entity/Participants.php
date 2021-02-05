@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ParticipantsRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -69,6 +70,35 @@ class Participants implements UserInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Campus")
      */
     private $campus;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity=Inscriptions::class, mappedBy="participant")
+     */
+    private $inscriptions;
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getInscriptions(): ArrayCollection
+    {
+        return $this->inscriptions;
+    }
+
+    /**
+     * @param ArrayCollection $inscriptions
+     */
+    public function setInscriptions(ArrayCollection $inscriptions): void
+    {
+        $this->inscriptions = $inscriptions;
+    }
+
+    public function __construct()
+    {
+        $this->inscriptions = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {

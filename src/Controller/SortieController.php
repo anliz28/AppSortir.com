@@ -27,18 +27,21 @@ class SortieController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'La sortie a bien été créée');
-            return $this->redirectToRoute("sortie_list");
+            return $this->redirectToRoute("list");
         }
         return $this->render('sortie/add.html.twig', [
             "sortieAddForm" => $sortieAddForm->createView()
         ]);
     }
     /**
-     * @Route("sortie/list", name="sortie_list")
+     * @Route("sortie/list", name="list")
      */
     public function list(): Response
     {
-        return $this->render('sortie/list.html.twig',[]);
+        $em = $this->getDoctrine()->getManager();
+
+        return $this->render('sortie/list.html.twig',['sortie' => $em->getRepository(Sortie::class)->findAll()]);
+
     }
 }
 

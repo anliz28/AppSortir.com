@@ -26,8 +26,9 @@
             <span> <a href="{{ path('home') }}">Acceuil</a></span>
             <span><a href="{{ path('logout') }}">Se déconnecter</a> </span>
             <span><a href="{{ path('sortie_add') }}">Ajouter une sortie</a> </span>
-            <span><a href="{{ path('sortie_list') }}">Voir les sorties</a> </span>
+            <span><a href="{{ path('list') }}">Voir les sorties</a> </span>
             <span><a href="{{ path('profil')}}">Voir le profil</a> </span>
+
 
         {% else %}
             <a href="{{ path('login') }}">Connexion</a>

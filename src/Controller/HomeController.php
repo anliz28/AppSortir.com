@@ -22,9 +22,7 @@ class HomeController extends AbstractController
         $participant = $this->getUser();
 
         return $this->render('main/home.html.twig',
-            [
-                'participant'=>$this->getUser()
-            ]
+
         );
     }
 }

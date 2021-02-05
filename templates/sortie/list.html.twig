@@ -2,5 +2,11 @@
 
     {% block title %}Sortir avec l'ENI team{% endblock %}
 {% block main %}
-    <h1>Faites votre choix ou proposez votre sortie !</h1>
+    <ul>
+        {% for s in sortie %}
+           <li>{{ s.nom }}, {{ s.lieu }}<span> <a href="{{ path('inscrire',{'id':s.id}) }}" class="btn btn-success">S'inscrire sur la sortie</a></span></li>
+
+        {% endfor %}
+    </ul>
+
 {% endblock %}
