@@ -4,13 +4,13 @@
 
 {% block main %}
 
-   <div><p>Pseudo: {{ participant.pseudo }}</p></div>
-    <div><p>Nom: {{ participant.nom }}<p></div>
-    <div><p>Prenom: {{ participant.prenom }}<p></div>
-    <div><p>Téléphone: {{ participant.telephone }}<p></div>
-    <div><p>Email: {{ participant.mail }}<p></div>
-    <div><p>Campus: {{ participant.campus.nomCampus }}<p></div>
+   <div><p><strong>Pseudo:</strong> {{ participant.pseudo }}</p></div>
+    <div><p><strong>Nom: </strong>{{ participant.nom }}<p></div>
+    <div><p><strong>Prenom:</strong> {{ participant.prenom }}<p></div>
+    <div><p><strong>Téléphone: </strong>{{ participant.telephone }}<p></div>
+    <div><p><strong>Email:</strong> {{ participant.mail }}<p></div>
+    <div><p><strong>Campus:</strong> {{ participant.campus.nomCampus }}<p></div>
 
-    <a href="{{ path('modifProfil') }}">Modifier profil</a>
+    <div><a href="{{ path('modifProfil') }}" class="btn btn-success">Modifier profil</a></div>
 
 {% endblock %}

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SortieController extends AbstractController
 {
     /**
-     * @Route("/sortie/add", name="sortie_add")
+     * @Route("sortie/add", name="sortie_add")
      */
     public function add(EntityManagerInterface $em, Request $request): Response
     {
@@ -28,6 +28,7 @@ class SortieController extends AbstractController
 
         if ($sortieAddForm->isSubmitted() && $sortieAddForm->isValid()) {
 
+           // $sortie->setEtat(1);
             $em->persist($sortie);
             $em->flush();
 
@@ -39,8 +40,9 @@ class SortieController extends AbstractController
             "sortieAddForm" => $sortieAddForm->createView()
         ]);
     }
+
     /**
-     * @Route("/sortie/detail/{id}", name="sortie_detail", requirements={"id":"\d+"}, methods={"GET"})
+     * @Route("sortie/detail/{id}", name="sortie_detail", requirements={"id":"\d+"}, methods={"GET"})
      */
     public function detail($id, Request $request): Response
     {
@@ -59,7 +61,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/sortie/modifier/{id}", name="sortie_modifier", requirements={"id":"\d+"})
+     * @Route("sortie/modifier/{id}", name="sortie_modifier", requirements={"id":"\d+"})
      */
     public function modifier($id, Request $request, EntityManagerInterface $em): Response
     {
@@ -76,9 +78,8 @@ class SortieController extends AbstractController
         $sortieModifForm->handleRequest($request);
 
         if ($sortieModifForm->isSubmitted() && $sortieModifForm->isValid()) {
-            //TODO récupérer les nouvelles infos et les associer à ma $sortie ?
+
             $sortie = $sortieModifForm->getData();
-            dump($sortie);
             $em->persist($sortie);
             $em->flush();
 
@@ -90,13 +91,11 @@ class SortieController extends AbstractController
             "sortieModifForm" => $sortieModifForm->createView(),
             "sortie" => $sortie
         ]);
-
-
     }
 
 
     /**
-     * @Route("/sortie/publier/{id}", name="sortie_publier", requirements={"id":"\d+"}, methods={"GET"})
+     * @Route("sortie/publier/{id}", name="sortie_publier", requirements={"id":"\d+"}, methods={"GET"})
      */
     public function publier($id, EntityManagerInterface $em): Response
     {
@@ -107,27 +106,20 @@ class SortieController extends AbstractController
         if(empty($sortie)){
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
-        //récupérer les nouvelles infos
-        //$sortieModifForm = $this->createForm(SortieType::class, $sortie);
-        //$sortieModifForm->handleRequest($request);
-
-       //if ($sortieModifForm->isSubmitted() && $sortieModifForm->isValid()) {
-
             //modification de l'etat
+            $etat = $sortie->getEtat;
+            $etat->getId();
             $sortie->setEtat(2);
             $em->persist($sortie);
             $em->flush();
 
-            $this->addFlash('success', 'La sortie a bien été modifiée');
-        //    return $this->redirectToRoute("home");
-       // }
-        return $this->render('main/home.html.twig', [
-           // "sortieModifForm" => $sortieModifForm->createView(),
+            $this->addFlash('success', 'La sortie a bien été publiée');
+            return $this->render('main/home.html.twig', [
             "sortie" => $sortie
         ]);
     }
     /**
-     * @Route("/sortie/annuler/{id}", name="sortie_annuler", requirements={"id":"\d+"}, methods={"GET"})
+     * @Route("sortie/annuler/{id}", name="sortie_annuler", requirements={"id":"\d+"}, methods={"GET"})
      */
     public function annuler($id, EntityManagerInterface $em): Response
     {
@@ -139,29 +131,21 @@ class SortieController extends AbstractController
         if(empty($sortie)){
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
-
-
-       // $sortieModifForm = $this->createForm(SortieType::class, $sortie);
-      //  $sortieModifForm->handleRequest($request);
-
-       // if ($sortieModifForm->isSubmitted() && $sortieModifForm->isValid()) {
-
-            //modification de l'etat
+            $etat = $sortie->getEtat;
+            $etat->getId();
             $sortie->setEtat(6);
             $em->persist($sortie);
             $em->flush();
 
-            $this->addFlash('success', 'La sortie a bien été modifiée');
-         //  return $this->redirectToRoute("home");
-      //  }
+            $this->addFlash('success', 'La sortie a bien été annulée');
+
         return $this->render('main/home.html.twig', [
-          //  "sortieModifForm" => $sortieModifForm->createView(),
             "sortie" => $sortie
         ]);
     }
     /**
-     * @Route("/sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
-     */
+     * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
+
     public function delete($id, EntityManagerInterface $em): Response
     {
         $em = $this->getDoctrine()->getManager();
@@ -180,7 +164,8 @@ class SortieController extends AbstractController
 
         return $this->render('main/home.html.twig');
 
-    }
+    }*/
+
     /**
      * @Route("sortie/list", name="list")
      */

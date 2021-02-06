@@ -23,11 +23,11 @@
     <nav>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-            <span> <a href="{{ path('home') }}">Acceuil</a></span>
-            <span><a href="{{ path('logout') }}">Se déconnecter</a> </span>
-            <span><a href="{{ path('sortie_add') }}">Ajouter une sortie</a> </span>
-            <span><a href="{{ path('list') }}">Voir les sorties</a> </span>
-            <span><a href="{{ path('profil')}}">Voir le profil</a> </span>
+            <span> <a href="{{ path('home') }}" class="btn btn-secondary">Acceuil</a></span>
+            <span><a href="{{ path('logout') }}" class="btn btn-secondary">Se déconnecter</a> </span>
+            <span><a href="{{ path('sortie_add') }}" class="btn btn-secondary">Ajouter une sortie</a> </span>
+            <span><a href="{{ path('list') }}" class="btn btn-secondary">Voir les sorties</a> </span>
+            <span><a href="{{ path('profil')}}" class="btn btn-secondary">Voir le profil</a> </span>
 
 
         {% else %}
@@ -38,7 +38,10 @@
 {% endblock %}
 
 {% block main %}
-
+{% for message in app.flashes('success') %}
+<div class="alert alert-success" role="alert">
+    {{ message }}</div>
+    {% endfor %}
 {% endblock %}
 
 {% block footer %}

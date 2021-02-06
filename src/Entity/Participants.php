@@ -56,6 +56,11 @@ class Participants implements UserInterface
     private $mot_de_passe;
 
     /**
+     * @var
+     */
+    private $plainPassword;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $administrateur;
@@ -76,6 +81,24 @@ class Participants implements UserInterface
      * @ORM\OneToMany(targetEntity=Inscriptions::class, mappedBy="participant")
      */
     private $inscriptions;
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
 
     /**
      * @return ArrayCollection

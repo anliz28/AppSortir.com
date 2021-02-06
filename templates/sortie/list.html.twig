@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Liste des sorties{% endblock %}
+
+{% block main %}
+    <ul>
+        {% for s in sortie %}
+            <li><a href="{{ path('sortie_detail',{'id': s.id}) }}">{{ s.nom }}, {{ s.lieu }}</a><span><a href="{{ path('inscrire',{'id': s.id}) }}" class="btn btn-info">s'inscrire sur cette sortie</a> </span> <span><a href="{{ path('sortie_modifier',{'id': s.id}) }}" class="btn btn-success">Modifier la sortie</a></span></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

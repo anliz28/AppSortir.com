@@ -50,6 +50,8 @@ class Sortie
      * @ORM\Column(type="text", nullable=true)
      */
     private $infosSortie;
+
+
     //mise en place d'une relation OneToOne en unidirectionnel avec l'entité Particpants
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Participants")
@@ -62,7 +64,7 @@ class Sortie
     }
 
     /**
-     *      * @ORM\Column (type="string", length=120)
+     * @ORM\Column (type="string", length=120)
      */
     private $lieu;
 
@@ -76,6 +78,28 @@ class Sortie
      * @ORM\OneToMany(targetEntity=Inscriptions::class, mappedBy="sortie")
      */
     private $inscriptions;
+
+    /**
+     * @ORM\Column (type="integer")
+     */
+    private $etat_sortie;
+
+    /**
+     * @return mixed
+     */
+    public function getEtatSortie()
+    {
+        return $this->etat_sortie;
+    }
+
+    /**
+     * @param mixed $etat_sortie
+     */
+    public function setEtatSortie($etat_sortie): self
+    {
+        $this->etat_sortie = $etat_sortie;
+        return  $this;
+    }
 
 
 

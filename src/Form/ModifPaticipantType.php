@@ -21,6 +21,12 @@ class ModifPaticipantType extends AbstractType
             ->add('prenom')
             ->add('telephone')
             ->add('mail')
+            ->add('plainPassword',RepeatedType::class,
+                array('type'=> PasswordType::class,
+                    'required'=> false,
+                    'first_options'=> array('label'=> 'Mot de passe'),
+                    'second_options'=> array('label'=> 'Répéter mot de passe')
+                ))
             ->add('campus', EntityType::class,
                 ['class'=> Campus::class,
                     'choice_label' => function ($campus) {

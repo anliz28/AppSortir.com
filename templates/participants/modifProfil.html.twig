@@ -7,8 +7,8 @@
     <fieldset>
         {{ form_start(modifForm) }}
         {{ form_widget(modifForm) }}
-        <button class="btn btn-success" type="submit">Valider la modification</button>
-        <button class="btn btn-danger" type="reset">Annuler la modification</button>
+        <button class="btn btn-info" type="submit">Valider la modification</button>
+        <a href="{{ path('profil') }}" class="btn btn-danger" type="reset">Annuler la modification</a>
         {{ form_end(modifForm) }}
 
     </fieldset>

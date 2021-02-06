@@ -35,7 +35,15 @@ class ParticipantsController extends AbstractController
         $modifForm = $this->createForm(ModifPaticipantType::class, $participant);
         $modifForm->handleRequest($request);
 
+        $mdp = $participant->getPlainPassword();
+
         if ($modifForm->isSubmitted() && $modifForm->isValid()){
+            if(empty($mdp)){
+                $mdp = $participant->getPassword();
+            }else{
+                $mdp = $encoder->encodePassword($participant,$participant->getPlainPassword());
+                $participant->setMotDePasse($mdp);
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($participant);
