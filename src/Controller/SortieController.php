@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Inscriptions;
+use App\Entity\Participants;
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
+    //méthode pour créer une nouvelle sortie
     /**
      * @Route("sortie/add", name="sortie_add")
      */
@@ -41,6 +44,7 @@ class SortieController extends AbstractController
         ]);
     }
 
+    //méthode pour afficher les détails d'une sortie
     /**
      * @Route("sortie/detail/{id}", name="sortie_detail", requirements={"id":"\d+"}, methods={"GET"})
      */
@@ -53,13 +57,21 @@ class SortieController extends AbstractController
         if(empty($sortie)){
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
+        //Fait le lien entre l'entité inscription pour récupérer mes participants
+        $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+        $participants = [];
+        foreach ($inscriptions as $inscription) {
+            array_push($participants, $inscription->getParticipant());
+        }
 
         return $this->render('sortie/detail.html.twig', [
-            "sortie" => $sortie
-        ]);
+            "sortie" => $sortie,
+            'participants'=> $participants]);
 
     }
 
+    //méthode pour modifier une sortie
     /**
      * @Route("sortie/modifier/{id}", name="sortie_modifier", requirements={"id":"\d+"})
      */
@@ -93,7 +105,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-
+   // méthode pour modifier l'état d'une sortie, en "publiée"
     /**
      * @Route("sortie/publier/{id}", name="sortie_publier", requirements={"id":"\d+"}, methods={"GET"})
      */
@@ -107,9 +119,9 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
             //modification de l'etat
-            $etat = $sortie->getEtat;
-            $etat->getId();
-            $sortie->setEtat(2);
+            //$etat = $sortie->getEtat;
+            //$etat->getId();
+            //$sortie->setEtat(2);
             $em->persist($sortie);
             $em->flush();
 
@@ -118,6 +130,8 @@ class SortieController extends AbstractController
             "sortie" => $sortie
         ]);
     }
+
+    //méthode pour modifier l'état d'une sortie en "annulée"
     /**
      * @Route("sortie/annuler/{id}", name="sortie_annuler", requirements={"id":"\d+"}, methods={"GET"})
      */
@@ -131,8 +145,8 @@ class SortieController extends AbstractController
         if(empty($sortie)){
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
-            $etat = $sortie->getEtat;
-            $etat->getId();
+            //$etat = $sortie->getEtat;
+            //$etat->getId();
             $sortie->setEtat(6);
             $em->persist($sortie);
             $em->flush();
@@ -166,6 +180,8 @@ class SortieController extends AbstractController
 
     }*/
 
+
+    //méthode pour afficher la liste des sorties
     /**
      * @Route("sortie/list", name="list")
      */

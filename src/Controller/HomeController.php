@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class HomeController extends AbstractController
 {
+
+    //méthode qui affiche la page home avec l'utilisateur en cours
     /**
      * @Route("/home", name="home")
      */

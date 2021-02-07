@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
 
-
+//méthode pour se connecter à son compte
     /**
      * @Route("/connexion", name="login")
      * @param AuthenticationUtils $authentif
@@ -39,6 +39,7 @@ class SecurityController extends AbstractController
         );}
     }
 
+    //méthode de déconnexion
     /**
      * @Route("/deconnexion", name="logout", methods={"GET"})
      */

@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Détail de la sortie{% endblock %}
+{% block flash %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}</div>
+    {% endfor %}
+{% endblock %}
 
 {% block main %}
     <h2>La sortie en détail</h2>
@@ -18,6 +24,12 @@
     <a href="{{ path('sortie_annuler',{'id': sortie.id}) }}" class="btn btn-danger">Annuler la sortie</a>
 
     <h3>Liste des participants inscrits</h3>
+
+    <ul>
+        {% for participant in participants %}
+           <li><a href="{{ path('profilParticipant', {'id': participant.id}) }}"> {{participant.pseudo}}, Campus: {{ participant.campus.nomCampus }}</a></li>
+        {% endfor %}
+    </ul>
 
 
 

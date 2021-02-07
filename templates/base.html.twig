@@ -27,7 +27,7 @@
             <span><a href="{{ path('logout') }}" class="btn btn-secondary">Se déconnecter</a> </span>
             <span><a href="{{ path('sortie_add') }}" class="btn btn-secondary">Ajouter une sortie</a> </span>
             <span><a href="{{ path('list') }}" class="btn btn-secondary">Voir les sorties</a> </span>
-            <span><a href="{{ path('profil')}}" class="btn btn-secondary">Voir le profil</a> </span>
+            <span><a href="{{ path('profil')}}" class="btn btn-secondary">Voir mon profil</a> </span>
 
 
         {% else %}
@@ -36,13 +36,15 @@
     </nav>
     <h1 id="titre">Sortir</h1>
 {% endblock %}
-
-{% block main %}
-{% for message in app.flashes('success') %}
-<div class="alert alert-success" role="alert">
-    {{ message }}</div>
+{% block flash %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}</div>
     {% endfor %}
 {% endblock %}
+{% block main %}
+{% endblock %}
+
 
 {% block footer %}
     &copy 2021  ENI Ecole Informatique | Sortir.com

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Inscriptions;
+use App\Entity\Participants;
+use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +21,31 @@ class InscriptionsRepository extends ServiceEntityRepository
         parent::__construct($registry, Inscriptions::class);
     }
 
+//Requete pour compter le nombre d'inscriptions à une sortie
+
+    public function countByInscrits(Sortie $sortie)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('COUNT(i.id)')
+            ->where('i.sortie = :sortie')
+            ->setParameter(':sortie', $sortie)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+    }
+
+    public function siDejaInscrit(Participants $participant, Sortie $sortie)
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.participant = :participant')
+            ->andWhere('i.sortie = :sortie')
+            ->setParameter('participant', $participant)
+            ->setParameter('sortie', $sortie)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+
+    }
     // /**
     //  * @return Inscriptions[] Returns an array of Inscriptions objects
     //  */
