@@ -260,10 +260,6 @@ class SortieController extends AbstractController
         */
     public function delete($id, EntityManagerInterface $em): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
-        return $this->render('sortie/list.html.twig',['sortie' => $em->getRepository(Sortie::class)->findAll()]);
-
         //recherche en bdd
         $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
         $sortie = $serieRepo->find($id);

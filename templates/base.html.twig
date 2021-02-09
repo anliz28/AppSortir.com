@@ -4,52 +4,39 @@
     <meta charset="UTF-8">
     <title> {% block title %}Sortir.com{% endblock %}</title>
     {% block head_css %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Merienda+One&family=Open+Sans+Condensed:wght@700&display=swap" rel="stylesheet">
     {% endblock %}
     {% block head_js %}
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     {% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}">
+    <link rel="icon" href="imgages/logo">
+    <link rel="icon" href="{{ asset('images/favicon.png')}}" />
+
 </head>
 
-<body class="container">
+<body>
+    <div class="container-fluid p-0">
+        {% block header %}
+            {% include ('layout/navbar.html.twig') %}
+        {% endblock %}
 
-{% block header %}
+        {% block main %}
+            <h1 id="titre">Sortir</h1>
+        {% endblock %}
 
-    <nav>
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-
-            <span> <a href="{{ path('home') }}" class="btn btn-secondary">Acceuil</a></span>
-            <span><a href="{{ path('logout') }}" class="btn btn-secondary">Se déconnecter</a> </span>
-            <span><a href="{{ path('sortie_add') }}" class="btn btn-secondary">Ajouter une sortie</a> </span>
-            <span><a href="{{ path('list') }}" class="btn btn-secondary">Voir les sorties</a> </span>
-            <span><a href="{{ path('profil')}}" class="btn btn-secondary">Voir mon profil</a> </span>
-
-
-        {% else %}
-            <a href="{{ path('login') }}">Connexion</a>
-        {% endif %}
-    </nav>
-    <h1 id="titre">Sortir</h1>
-{% endblock %}
-{% block flash %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}</div>
-    {% endfor %}
-{% endblock %}
-{% block main %}
-{% endblock %}
-
-
-{% block footer %}
-    &copy 2021  ENI Ecole Informatique | Sortir.com
-{% endblock %}
-
+        <footer >
+                {% include ('layout/footer.html.twig') %}
+        </footer>
+    </div>
 </body>
 
 </html>

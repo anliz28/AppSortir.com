@@ -3,11 +3,12 @@
 {% block title %}Profil Participant{% endblock %}
 
 {% block main %}
-    <h1>{{ participant.pseudo }}</h1>
-    <p>{{ participant.nom }}</p>
-    <p>{{ participant.prenom }}</p>
-    <p>{{ participant.telephone }}</p>
-    <p>{{ participant.mail }}</p>
-    <p>{{ participant.campus.nomCampus }}</p>
-
+    <div>
+        <div><h1>{{ participant.pseudo }}</h1> <img alt="photo de profil" src="{{ asset(participant.photoProfil) }}"  width="150"/> </div>
+        <p><strong>Nom: </strong>{{ participant.nom }}</p>
+        <p><strong>Prenom: </strong>{{ participant.prenom }}</p>
+        <p><strong>Téléphone: </strong>{{ participant.telephone }}</p>
+        <p><strong>Email: </strong>{{ participant.mail }}</p>
+        <p><strong>Campus: </strong>{{ participant.campus.nomCampus }}</p>
+    </div>
 {% endblock %}

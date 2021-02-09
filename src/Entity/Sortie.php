@@ -82,6 +82,7 @@ class Sortie
 
 
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -170,9 +171,10 @@ class Sortie
     /**
      * @param mixed $organisateur
      */
-    public function setOrganisateur($organisateur): void
+    public function setOrganisateur($organisateur): self
     {
         $this->organisateur = $organisateur;
+        return $this;
     }
 
     /**
@@ -206,9 +208,6 @@ class Sortie
     {
         $this->etat = $etat;
     }
-
-
-
 
 
     /**

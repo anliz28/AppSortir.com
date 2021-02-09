@@ -38,9 +38,24 @@ class ParticipantsController extends AbstractController
         $modifForm = $this->createForm(ModifPaticipantType::class, $participant);
         $modifForm->handleRequest($request);
 
-        $mdp = $participant->getPlainPassword();
+
 
         if ($modifForm->isSubmitted() && $modifForm->isValid()){
+
+            //Récupération de la photo de profil
+
+            $picture = $modifForm->get('photoProfil')->getData();
+            if($picture) {
+                $fichier = $participant->getPseudo() . '.' . $picture->guessExtension();
+
+                // On copie le fichier dans le dossier public/media
+                $picture->move('media', $fichier);
+                $photo = '/media/' . $fichier;
+                //et on enregistre le chemin de la photo en bdd
+                $participant->setPhotoProfil($photo);
+            }
+            //remplacement du mot de passe si modifié ou garde l'ancien
+            $mdp = $participant->getPlainPassword();
             if(empty($mdp)){
                 $mdp = $participant->getPassword();
             }else{

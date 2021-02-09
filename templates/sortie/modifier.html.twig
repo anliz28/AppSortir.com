@@ -1,28 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail de la sortie{% endblock %}
+{% block title %}Modifier la sortie{% endblock %}
 
 {% block main %}
-    <h2>Modifier une sortie</h2>
 
-    {{ form_start(sortieModifForm) }}
-    {{ form_widget(sortieModifForm) }}
-    <button type="submit" class="btn btn-info">Modifier</button>
-    <a href="{{ path('list') }}" type="reset" class="btn btn-danger">Annuler</a>
-    {{ form_start(sortieModifForm) }}
+    <h2>Modifier la sortie</h2>
+    <div id="Formulaire" class="row m-0 justify-content-center">
 
-
-    <br>
-    <a href="{{path('sortie_publier',{'id':sortie.id})}}">Publier la sortie</a>
-    <br>
-    <a href="{{ path('sortie_annuler',{'id': sortie.id}) }}">Annuler la sortie</a>
-    <br>
-    <a href="{{path('home')}}">Annuler</a>
+        {{ form_start(sortieModifForm) }}
+        {{ form_widget(sortieModifForm) }}
+        <button type="submit" class="btn btn-info">Modifier</button>
+        <a href="{{ path('list') }}" type="reset" class="btn btn-info">Annuler</a>
+        {{ form_start(sortieModifForm) }}
 
 
-
-
-
+        <span><a href="{{path('sortie_publier',{'id':sortie.id})}}" class="btn btn-info">Publier la sortie</a></span>
+        <span><a href="{{path('sortie_annuler',{'id':sortie.id})}}" class="btn btn-info">Annuler la sortie</a></span>
+        <span><a href="{{path('home')}}" class="btn btn-info">Annuler</a></span>
+    </div>
 
 {% endblock %}
 
