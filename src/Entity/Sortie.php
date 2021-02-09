@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
@@ -52,15 +53,16 @@ class Sortie
     private $infosSortie;
 
 
-    //mise en place d'une relation OneToOne en unidirectionnel avec l'entité Particpants
+    //mise en place d'une relation ManyToOne en unidirectionnel avec l'entité Participants
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Participants")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participants")
      */
     private $organisateur;
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     /**
@@ -69,37 +71,14 @@ class Sortie
     private $lieu;
 
     /**
-     * @var Etats
-     * @ORM\ManyToOne(targetEntity="App\Entity\Etats")
+     * @ORM\Column (type="integer")
      */
     private $etat;
 
     /**
-     * @ORM\OneToMany(targetEntity=Inscriptions::class, mappedBy="sortie")
+     * @ORM\OneToMany (targetEntity="App\Entity\Inscriptions", mappedBy="sortie")
      */
     private $inscriptions;
-
-    /**
-     * @ORM\Column (type="integer")
-     */
-    private $etat_sortie;
-
-    /**
-     * @return mixed
-     */
-    public function getEtatSortie()
-    {
-        return $this->etat_sortie;
-    }
-
-    /**
-     * @param mixed $etat_sortie
-     */
-    public function setEtatSortie($etat_sortie): self
-    {
-        $this->etat_sortie = $etat_sortie;
-        return  $this;
-    }
 
 
 
@@ -223,16 +202,30 @@ class Sortie
     /**
      * @param mixed $etat
      */
-    public function setEtat($etat)
+    public function setEtat($etat): void
     {
         $this->etat = $etat;
     }
+
+
+
+
+
     /**
-     * @return Collection|Inscriptions[]
+     * @return ArrayCollection
      */
-    public function getInscriptions(): Collection
+    public function getInscriptions(): ArrayCollection
     {
         return $this->inscriptions;
     }
+
+    /**
+     * @param ArrayCollection $inscriptions
+     */
+    public function setInscriptions(ArrayCollection $inscriptions): void
+    {
+        $this->inscriptions = $inscriptions;
+    }
+
 
 }

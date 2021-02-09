@@ -12,13 +12,10 @@
     {{ form_start(sortieModifForm) }}
 
 
-
-
-
     <br>
     <a href="{{path('sortie_publier',{'id':sortie.id})}}">Publier la sortie</a>
     <br>
-    <a href="{{path('sortie_annuler',{'id':sortie.id})}}">Annuler la sortie</a>
+    <a href="{{ path('sortie_annuler',{'id': sortie.id}) }}">Annuler la sortie</a>
     <br>
     <a href="{{path('home')}}">Annuler</a>
 

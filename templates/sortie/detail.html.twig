@@ -22,6 +22,8 @@
 
     <a href="{{ path('sortie_modifier',{'id': sortie.id}) }}" class="btn btn-success">Modifier la sortie</a>
     <a href="{{ path('sortie_annuler',{'id': sortie.id}) }}" class="btn btn-danger">Annuler la sortie</a>
+    <a href="{{ path('inscrire',{'id': sortie.id}) }}" class="btn btn-info">S'inscrire</a>
+    <a href="{{ path('sortie_desinscrire',{'id': sortie.id}) }}" class="btn btn-info">Se désinscrire</a>
 
     <h3>Liste des participants inscrits</h3>
 

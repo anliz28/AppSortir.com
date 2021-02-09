@@ -12,8 +12,7 @@ class Etats
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", unique=true)
      */
     private $id;
 
@@ -27,15 +26,29 @@ class Etats
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLibelle()
     {
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): self
+    /**
+     * @param mixed $libelle
+     */
+    public function setLibelle($libelle): void
     {
         $this->libelle = $libelle;
-
-        return $this;
     }
+
+
 }

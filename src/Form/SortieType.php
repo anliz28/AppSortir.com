@@ -21,12 +21,6 @@ class SortieType extends AbstractType
             ->add('nbInscriptionsMax')
             ->add('infosSortie')
             ->add('lieu')
-            ->add('etat', EntityType::class,
-                ['class'=> Etats::class,
-                    'choice_label' => function ($etat) {
-                        return $etat->getLibelle();
-                    }
-                ]);
         ;
     }
     public function configureOptions(OptionsResolver $resolver)

@@ -19,7 +19,7 @@ class Inscriptions
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Sortie::class, inversedBy="inscriptions")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sortie", inversedBy="inscriptions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $sortie;
@@ -80,7 +80,7 @@ class Inscriptions
     public function setInscription(Sortie $inscription)
     {
        $this->inscription = $inscription;
-       return$this;
+       return $this;
     }
 
 

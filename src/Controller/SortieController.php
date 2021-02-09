@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Etats;
 use App\Entity\Inscriptions;
 use App\Entity\Participants;
 use App\Entity\Sortie;
@@ -30,8 +31,8 @@ class SortieController extends AbstractController
         $sortieAddForm->handleRequest($request);
 
         if ($sortieAddForm->isSubmitted() && $sortieAddForm->isValid()) {
+            $sortie->setEtat(1);
 
-           // $sortie->setEtat(1);
             $em->persist($sortie);
             $em->flush();
 
@@ -77,32 +78,67 @@ class SortieController extends AbstractController
      */
     public function modifier($id, Request $request, EntityManagerInterface $em): Response
     {
+
         //récupérer la sortie en bdd
         $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
         $sortie = $sortieRepo->find($id);
 
-        if(empty($sortie)){
+        if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
-        //récupérer les infos de la sortie sélectionnée
-        $sortieModifForm = $this->createForm(SortieType::class, $sortie);
 
-        $sortieModifForm->handleRequest($request);
+        //contrôler que le user est bien l'organisateur
+        $organisateur_id = $sortie->getOrganisateur()->getId();
 
-        if ($sortieModifForm->isSubmitted() && $sortieModifForm->isValid()) {
+        //récupérer le user connecté
+        $user_id = $this->getUser()->getId();
 
-            $sortie = $sortieModifForm->getData();
-            $em->persist($sortie);
-            $em->flush();
+        if ($organisateur_id <> $user_id) {
+            //récupérer la liste des participants
+            //Fait le lien entre l'entité inscription pour récupérer mes participants
+            $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
 
-            $this->addFlash('success', 'La sortie a bien été modifiée');
-            return $this->redirectToRoute("home");
+            $participants = [];
+            foreach ($inscriptions as $inscription) {
+                array_push($participants, $inscription->getParticipant());
+            }
+
+            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir la modifier");
+            return $this->render('sortie/detail.html.twig', [
+                "sortie" => $sortie,
+                'participants'=> $participants
+                ]);
+        } else {
+
+            //récupérer les infos de la sortie sélectionnée
+            $sortieModifForm = $this->createForm(SortieType::class, $sortie);
+
+            $sortieModifForm->handleRequest($request);
+
+            if ($sortieModifForm->isSubmitted() && $sortieModifForm->isValid()) {
+
+                $sortie = $sortieModifForm->getData();
+                $em->persist($sortie);
+                $em->flush();
+
+                $this->addFlash('success', 'La sortie a bien été modifiée');
+                return $this->redirectToRoute("home");
+            }
+            //récupérer la liste des participants
+            //Fait le lien entre l'entité inscription pour récupérer mes participants
+            $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+            $participants = [];
+            foreach ($inscriptions as $inscription) {
+                array_push($participants, $inscription->getParticipant());
+            }
+
+
+            return $this->render('sortie/modifier.html.twig', [
+                "sortieModifForm" => $sortieModifForm->createView(),
+                "sortie" => $sortie, 'participants'=> $participants
+            ]);
         }
-
-        return $this->render('sortie/modifier.html.twig', [
-            "sortieModifForm" => $sortieModifForm->createView(),
-            "sortie" => $sortie
-        ]);
     }
 
    // méthode pour modifier l'état d'une sortie, en "publiée"
@@ -115,20 +151,41 @@ class SortieController extends AbstractController
         $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
         $sortie = $serieRepo->find($id);
 
-        if(empty($sortie)){
+        if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
+        //contrôler que le user est bien l'organisateur
+        $organisateur_id = $sortie->getOrganisateur()->getId();
+
+        //récupérer le user connecté
+        $user_id = $this->getUser()->getId();
+
+        if ($organisateur_id <> $user_id) {
+            //récupérer la liste des participants
+            //Fait le lien entre l'entité inscription pour récupérer mes participants
+            $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+            $participants = [];
+            foreach ($inscriptions as $inscription) {
+                array_push($participants, $inscription->getParticipant());
+            }
+
+            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir la publier");
+            return $this->render('sortie/detail.html.twig', [
+                "sortie" => $sortie,
+                'participants' => $participants
+            ]);
+        } else {
             //modification de l'etat
-            //$etat = $sortie->getEtat;
-            //$etat->getId();
-            //$sortie->setEtat(2);
+            $sortie->setEtat(2);
             $em->persist($sortie);
             $em->flush();
 
             $this->addFlash('success', 'La sortie a bien été publiée');
             return $this->render('main/home.html.twig', [
-            "sortie" => $sortie
-        ]);
+                "sortie" => $sortie
+            ]);
+        }
     }
 
     //méthode pour modifier l'état d'une sortie en "annulée"
@@ -141,25 +198,66 @@ class SortieController extends AbstractController
         $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
         $sortie = $serieRepo->find($id);
 
-
-        if(empty($sortie)){
+        if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
-            //$etat = $sortie->getEtat;
-            //$etat->getId();
-            $sortie->setEtat(6);
-            $em->persist($sortie);
-            $em->flush();
 
-            $this->addFlash('success', 'La sortie a bien été annulée');
+        //contrôler que le user est bien l'organisateur
+        $organisateur_id = $sortie->getOrganisateur()->getId();
 
-        return $this->render('main/home.html.twig', [
-            "sortie" => $sortie
-        ]);
+        //récupérer le user connecté
+        $user_id = $this->getUser()->getId();
+
+        $dateDebut = $sortie->getDateDebut();
+        $dateDuJour = new \DateTime();
+
+        if ($organisateur_id <> $user_id) {
+            //récupérer la liste des participants
+            //Fait le lien entre l'entité inscription pour récupérer mes participants
+            $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+            $participants = [];
+            foreach ($inscriptions as $inscription) {
+                array_push($participants, $inscription->getParticipant());
+            }
+
+            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir l'annuler");
+            return $this->render('sortie/detail.html.twig', [
+                "sortie" => $sortie,
+                'participants' => $participants
+            ]);
+        } elseif ($dateDebut < $dateDuJour) {
+            //contrôler si la sortie n'est pas déjà démarrée
+
+                $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+                $participants = [];
+                foreach ($inscriptions as $inscription) {
+                    array_push($participants, $inscription->getParticipant());
+                }
+
+                $this->addFlash('error', "Vous ne pouvez pas annuler cette sortie car elle est déjà commencée");
+                return $this->render('sortie/detail.html.twig', [
+                    "sortie" => $sortie,
+                    'participants' => $participants
+                ]);
+            } else {
+
+                $sortie->setEtat(6);
+                $em->persist($sortie);
+                $em->flush();
+
+                $this->addFlash('success', 'La sortie a bien été annulée');
+
+                return $this->render('main/home.html.twig', [
+                    "sortie" => $sortie
+                ]);
+            }
+
     }
-    /**
-     * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
-
+        /**
+         * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
+        */
     public function delete($id, EntityManagerInterface $em): Response
     {
         $em = $this->getDoctrine()->getManager();
@@ -178,7 +276,7 @@ class SortieController extends AbstractController
 
         return $this->render('main/home.html.twig');
 
-    }*/
+    }
 
 
     //méthode pour afficher la liste des sorties
