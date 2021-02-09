@@ -83,6 +83,28 @@ class Participants implements UserInterface
     private $inscriptions;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $photoProfil;
+
+    /**
+     * @return mixed
+     */
+    public function getPhotoProfil()
+    {
+        return $this->photoProfil;
+    }
+
+    /**
+     * @param mixed $photoProfil
+     */
+    public function setPhotoProfil($photoProfil):self
+    {
+        $this->photoProfil = $photoProfil;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getPlainPassword()

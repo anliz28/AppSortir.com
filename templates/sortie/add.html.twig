@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}Ajouter une sortie{% endblock %}
 
 {% block main %}
-    <h1>Ajouter une sortie de votre choix</h1>
-        <div class="formulaire">
+    <h3>Formulaire d'ajout de sortie</h3>
+    <div id="formulaire" class="row justify-content-center">
             {{ form_start(sortieAddForm) }}
 
             {{ form_row(sortieAddForm.nom) }}

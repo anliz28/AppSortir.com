@@ -3,7 +3,7 @@
 {% block title %}Profil participant{% endblock %}
 
 {% block main %}
-
+   <div><img alt="photo de profil" src="{{ asset(participant.photoProfil) }}" width="150" /> </div>
    <div><p><strong>Pseudo:</strong> {{ participant.pseudo }}</p></div>
     <div><p><strong>Nom: </strong>{{ participant.nom }}<p></div>
     <div><p><strong>Prenom:</strong> {{ participant.prenom }}<p></div>
@@ -11,6 +11,6 @@
     <div><p><strong>Email:</strong> {{ participant.mail }}<p></div>
     <div><p><strong>Campus:</strong> {{ participant.campus.nomCampus }}<p></div>
 
-    <div><a href="{{ path('modifProfil') }}" class="btn btn-success">Modifier profil</a></div>
+    <div><a href="{{ path('modifProfil') }}" class="btn btn-info">Modifier profil</a></div>
 
 {% endblock %}

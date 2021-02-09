@@ -54,7 +54,7 @@ class Sortie
 
     //mise en place d'une relation OneToOne en unidirectionnel avec l'entité Particpants
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Participants")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participants")
      */
     private $organisateur;
 
@@ -80,7 +80,7 @@ class Sortie
     private $inscriptions;
 
     /**
-     * @ORM\Column (type="integer")
+     * @ORM\Column (type="integer", nullable=true)
      */
     private $etat_sortie;
 

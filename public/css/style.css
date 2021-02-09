@@ -1,0 +1,73 @@
+body{
+    opacity:0.75;
+    background-color: #7DA0B1;
+    color: #183691;
+    font-size: 20px;
+    font-family: 'Merienda One', cursive;
+    box-sizing: border-box;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+span {
+    margin: 15Px;
+}
+
+.list{
+    text-align: left;
+    list-style-type: disc;
+}
+
+li{
+    text-align: center;
+    list-style-type: none;
+}
+h1{
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: bold;
+    font-size: 70px;
+    color: blue;
+    margin: 50px;
+}
+
+h2{
+    margin: 20Px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: bold;
+}
+a{
+    color: #2e3136;
+    margin: 20Px;
+}
+
+a:hover{
+    color: #0a0a0a;
+}
+
+.btn{
+    position: center;
+}
+
+nav {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 18px;
+    background-color: #262626;
+    margin: 0;
+}
+
+footer {
+    background-color: #262626;
+    color: #218BC3;
+    padding: 15px;
+    margin-bottom: 0;
+}
+
+#formulaire{
+    width: 70%;
+    margin: auto;
+}
+
+button{
+    color: #147dc2;
+}
