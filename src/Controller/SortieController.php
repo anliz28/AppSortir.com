@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Etats;
+
 use App\Entity\Inscriptions;
-use App\Entity\Participants;
 use App\Entity\Sortie;
+use App\Form\SearchType;
 use App\Form\SortieType;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +16,40 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
+    /**
+     * @Route("/sortie/list", name="home")
+     */
+
+    public function listSortie ()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        return $this->render('sortie/list.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
+
+    }
+/*
+
+    public function listSortie (SortieRepository $repository, Request $request)
+    {
+        $sortie = new Sortie();
+        $form = $this->createForm(SearchType::class, $sortie);
+        $form -> handleRequest ($request);
+        $sortie = $repository->findSearch($sortie);
+
+        return $this->render('sortie/list.html.twig', [
+            'sortie' => $sortie,
+            'form' => $form->createView()
+        ]);
+    }
+    */
     //méthode pour créer une nouvelle sortie
     /**
      * @Route("sortie/add", name="sortie_add")
      */
     public function add(EntityManagerInterface $em, Request $request): Response
     {
+
+
         $sortie = new Sortie();
 
         //hydrater la sortie avec l'organisateur (user connecté)
@@ -205,8 +234,22 @@ class SortieController extends AbstractController
         //contrôler que le user est bien l'organisateur
         $organisateur_id = $sortie->getOrganisateur()->getId();
 
+
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
+
+        return $this->render('main/home.html.twig', [
+            "sortie" => $sortie
+        ]);
+    }
+
+    /**
+     * @Route("/", name="sortie")
+     */
+
+    /**
+     * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
+>>>>>>> filtres
 
         $dateDebut = $sortie->getDateDebut();
         $dateDuJour = new \DateTime();
@@ -261,8 +304,8 @@ class SortieController extends AbstractController
     public function delete($id, EntityManagerInterface $em): Response
     {
         //recherche en bdd
-        $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
-        $sortie = $serieRepo->find($id);
+        $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
+        $sortie = $sortieRepo->find($id);
 
         //suppression
         $em->remove($sortie);
@@ -276,15 +319,14 @@ class SortieController extends AbstractController
 
 
     //méthode pour afficher la liste des sorties
-    /**
-     * @Route("sortie/list", name="list")
-     */
+ /*
     public function list(): Response
     {
         $em = $this->getDoctrine()->getManager();
-
+//dd('hello');
         return $this->render('sortie/list.html.twig',['sortie' => $em->getRepository(Sortie::class)->findAll()]);
 
     }
+    */
 }
 
