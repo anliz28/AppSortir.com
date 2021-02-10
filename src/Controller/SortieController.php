@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Etats;
+
+
 use App\Entity\Inscriptions;
-use App\Entity\Participants;
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,12 +15,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
+    /**
+     * @Route("/sortie/list", name="home")
+     */
+
+    public function listSortie ()
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $this->render('sortie/list.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
+    }
+
+
     //méthode pour créer une nouvelle sortie
     /**
      * @Route("sortie/add", name="sortie_add")
      */
     public function add(EntityManagerInterface $em, Request $request): Response
     {
+
         $sortie = new Sortie();
 
         //hydrater la sortie avec l'organisateur (user connecté)
@@ -133,7 +145,6 @@ class SortieController extends AbstractController
                 array_push($participants, $inscription->getParticipant());
             }
 
-
             return $this->render('sortie/modifier.html.twig', [
                 "sortieModifForm" => $sortieModifForm->createView(),
                 "sortie" => $sortie, 'participants'=> $participants
@@ -205,58 +216,16 @@ class SortieController extends AbstractController
         //contrôler que le user est bien l'organisateur
         $organisateur_id = $sortie->getOrganisateur()->getId();
 
+
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
 
-        $dateDebut = $sortie->getDateDebut();
-        $dateDuJour = new \DateTime();
-
-        if ($organisateur_id <> $user_id) {
-            //récupérer la liste des participants
-            //Fait le lien entre l'entité inscription pour récupérer mes participants
-            $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
-
-            $participants = [];
-            foreach ($inscriptions as $inscription) {
-                array_push($participants, $inscription->getParticipant());
-            }
-
-            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir l'annuler");
-            return $this->render('sortie/detail.html.twig', [
-                "sortie" => $sortie,
-                'participants' => $participants
-            ]);
-        } elseif ($dateDebut < $dateDuJour) {
-            //contrôler si la sortie n'est pas déjà démarrée
-
-                $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
-
-                $participants = [];
-                foreach ($inscriptions as $inscription) {
-                    array_push($participants, $inscription->getParticipant());
-                }
-
-                $this->addFlash('error', "Vous ne pouvez pas annuler cette sortie car elle est déjà commencée");
-                return $this->render('sortie/detail.html.twig', [
-                    "sortie" => $sortie,
-                    'participants' => $participants
-                ]);
-            } else {
-
-                $sortie->setEtat(6);
-                $em->persist($sortie);
-                $em->flush();
-
-                $this->addFlash('success', 'La sortie a bien été annulée');
-
-                return $this->render('main/home.html.twig', [
-                    "sortie" => $sortie
-                ]);
-            }
-
+        return $this->render('main/home.html.twig', [
+            "sortie" => $sortie
+        ]);
     }
         /**
-         * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
+        * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
         */
     public function delete($id, EntityManagerInterface $em): Response
     {
@@ -276,15 +245,14 @@ class SortieController extends AbstractController
 
 
     //méthode pour afficher la liste des sorties
-    /**
-     * @Route("sortie/list", name="list")
-     */
+ /*
     public function list(): Response
     {
         $em = $this->getDoctrine()->getManager();
-
+//dd('hello');
         return $this->render('sortie/list.html.twig',['sortie' => $em->getRepository(Sortie::class)->findAll()]);
 
     }
+    */
 }
 
