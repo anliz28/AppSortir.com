@@ -30,7 +30,6 @@ class SecurityController extends AbstractController
         if($this->isGranted('IS_AUTHENTICATED_FULLY')){
             return $this->render('main/home.html.twig');
         }else{
-            $this->addFlash('error', "L'identifiant ou le mot de passe est erroné");
              return $this->render('participants/login.html.twig',
             [
                 'last_username' => $lastUserName,

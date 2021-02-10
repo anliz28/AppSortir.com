@@ -5,11 +5,10 @@ namespace App\Controller;
 use App\Entity\Inscriptions;
 use App\Entity\Sortie;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\DateTime;
+
 
 class InscriptionController extends AbstractController
 {
@@ -116,9 +115,8 @@ class InscriptionController extends AbstractController
         //récupération du user courant
         $participant = $this->getUser();
         $dateDuJour = new \DateTime();
-        dump($dateDuJour);
         $dateDebut = $sortie->getDateDebut();
-        dump($dateDebut);
+
         //contrôle du non commencement de la sortie
         if($dateDebut < $dateDuJour){
 
@@ -137,7 +135,6 @@ class InscriptionController extends AbstractController
             //sélection de l'inscription
 
             $inscription = $inscriptionRepo[0];
-            dump($inscription);
 
             //suppression de l'inscription
             $em->remove($inscription);
