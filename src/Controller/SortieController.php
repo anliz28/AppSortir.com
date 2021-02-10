@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 
+
 use App\Entity\Inscriptions;
 use App\Entity\Sortie;
-use App\Form\SearchType;
 use App\Form\SortieType;
-use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,33 +21,17 @@ class SortieController extends AbstractController
 
     public function listSortie ()
     {
-
         $em = $this->getDoctrine()->getManager();
         return $this->render('sortie/list.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
-
     }
-/*
 
-    public function listSortie (SortieRepository $repository, Request $request)
-    {
-        $sortie = new Sortie();
-        $form = $this->createForm(SearchType::class, $sortie);
-        $form -> handleRequest ($request);
-        $sortie = $repository->findSearch($sortie);
 
-        return $this->render('sortie/list.html.twig', [
-            'sortie' => $sortie,
-            'form' => $form->createView()
-        ]);
-    }
-    */
     //méthode pour créer une nouvelle sortie
     /**
      * @Route("sortie/add", name="sortie_add")
      */
     public function add(EntityManagerInterface $em, Request $request): Response
     {
-
 
         $sortie = new Sortie();
 
@@ -162,7 +145,6 @@ class SortieController extends AbstractController
                 array_push($participants, $inscription->getParticipant());
             }
 
-
             return $this->render('sortie/modifier.html.twig', [
                 "sortieModifForm" => $sortieModifForm->createView(),
                 "sortie" => $sortie, 'participants'=> $participants
@@ -235,6 +217,7 @@ class SortieController extends AbstractController
         $organisateur_id = $sortie->getOrganisateur()->getId();
 
 
+
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
 
@@ -249,7 +232,7 @@ class SortieController extends AbstractController
 
     /**
      * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
->>>>>>> filtres
+
 
         $dateDebut = $sortie->getDateDebut();
         $dateDuJour = new \DateTime();
@@ -297,9 +280,17 @@ class SortieController extends AbstractController
                 ]);
             }
 
+
+        //récupérer le user connecté
+        $user_id = $this->getUser()->getId();
+
+
+        return $this->render('main/home.html.twig', [
+            "sortie" => $sortie
+        ]);
     }
         /**
-         * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
+        * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
         */
     public function delete($id, EntityManagerInterface $em): Response
     {
