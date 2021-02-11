@@ -4,14 +4,15 @@
 
 {% block main %}
     <div class="row m-0 justify-content-center">
-        <fieldset id="formulaire">
-            {{ form_start(modifForm) }}
-            {{ form_widget(modifForm) }}
-            <button class="btn btn-info" type="submit">Valider la modification</button>
-            <a href="{{ path('profil') }}" class="btn btn-info" type="reset">Annuler la modification</a>
-            {{ form_end(modifForm) }}
-
-        </fieldset>
+        <div class="Formulaire">
+            <fieldset>
+                {{ form_start(modifForm) }}
+                {{ form_widget(modifForm) }}
+                <button class="btn btn-info" type="submit">Valider la modification</button>
+                <a href="{{ path('profil') }}" class="btn btn-info" type="reset">Annuler la modification</a>
+                {{ form_end(modifForm) }}
+            </fieldset>
+        </div>
     </div>
 
 

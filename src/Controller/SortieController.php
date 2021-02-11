@@ -16,13 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class SortieController extends AbstractController
 {
     /**
-     * @Route("/sortie/list", name="home")
+     * @Route("'main/home", name="home")
      */
-
     public function listSortie ()
     {
         $em = $this->getDoctrine()->getManager();
-        return $this->render('sortie/list.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
+        return $this->render('main/home.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
     }
 
 
@@ -159,8 +158,8 @@ class SortieController extends AbstractController
     public function publier($id, EntityManagerInterface $em): Response
     {
         //recherche en bdd
-        $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
-        $sortie = $serieRepo->find($id);
+        $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
+        $sortie = $sortieRepo->find($id);
 
         if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
@@ -194,7 +193,7 @@ class SortieController extends AbstractController
 
             $this->addFlash('success', 'La sortie a bien été publiée');
             return $this->render('main/home.html.twig', [
-                "sortie" => $sortie
+                'sorties' => $em->getRepository(Sortie::class)->findAll()
             ]);
         }
     }
@@ -206,8 +205,8 @@ class SortieController extends AbstractController
     public function annuler($id, EntityManagerInterface $em): Response
     {
         //recherche en bdd
-        $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
-        $sortie = $serieRepo->find($id);
+        $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
+        $sortie = $sortieRepo->find($id);
 
         if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
@@ -215,44 +214,26 @@ class SortieController extends AbstractController
 
         //contrôler que le user est bien l'organisateur
         $organisateur_id = $sortie->getOrganisateur()->getId();
-
-
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
+        $participants = $sortie->getInscription()->getParticipant();
 
+        if ($organisateur_id <> $user_id) {
+            //modification de l'etat
+            $sortie->setEtat(6);
+            $em->persist($sortie);
+            $em->flush();
+            } else{
+            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir la publier");
+            return $this->render('sortie/detail.html.twig', [
+                "sortie" => $sortie,
+                'participants' => $participants
+            ]);
+        }
         return $this->render('main/home.html.twig', [
-            "sortie" => $sortie
+            'sorties' => $em->getRepository(Sortie::class)->findAll()
         ]);
     }
-        /**
-        * @Route("sortie/delete/{id}", name="sortie_delete", requirements={"id":"\d+"}, methods={"GET"})
-        */
-    public function delete($id, EntityManagerInterface $em): Response
-    {
-        //recherche en bdd
-        $serieRepo = $this->getDoctrine()->getRepository(Sortie::class);
-        $sortie = $serieRepo->find($id);
 
-        //suppression
-        $em->remove($sortie);
-        $em->flush();
-
-        $this->addFlash('success', "La sortie a été supprimée");
-
-        return $this->render('main/home.html.twig');
-
-    }
-
-
-    //méthode pour afficher la liste des sorties
- /*
-    public function list(): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-//dd('hello');
-        return $this->render('sortie/list.html.twig',['sortie' => $em->getRepository(Sortie::class)->findAll()]);
-
-    }
-    */
 }
 

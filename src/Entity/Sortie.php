@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Void_;
-use Symfony\Component\Validator\Constraints\DateTime;
+
 
 
 /**
@@ -204,24 +202,25 @@ class Sortie
     /**
      * @param mixed $etat
      */
-    public function setEtat($etat): void
+    public function setEtat($etat): self
     {
         $this->etat = $etat;
+        return $this;
     }
-
 
     /**
      * @return ArrayCollection
      */
-    public function getInscriptions(): ArrayCollection
+    public function getInscriptions()
     {
         return $this->inscriptions;
     }
 
+
     /**
-     * @param ArrayCollection $inscriptions
+     * @param ArrayCollection$inscriptions
      */
-    public function setInscriptions(ArrayCollection $inscriptions): void
+    public function setInscriptions(ArrayCollection $inscriptions):self
     {
         $this->inscriptions = $inscriptions;
     }

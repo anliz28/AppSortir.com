@@ -4,7 +4,8 @@
 
 {% block main %}
     <h3>Formulaire d'ajout de sortie</h3>
-    <div id="formulaire" class="row justify-content-center">
+    <div class="row justify-content-center">
+         <div class="Formulaire">
             {{ form_start(sortieAddForm) }}
 
             {{ form_row(sortieAddForm.nom) }}
@@ -15,10 +16,8 @@
             {{ form_row(sortieAddForm.infosSortie) }}
             {{ form_row(sortieAddForm.dateCloture) }}
             {{ form_row(sortieAddForm.lieu) }}
-
-
             <button class="btn btn-info" type="submit">Créer la sortie</button>
-
             {{ form_end(sortieAddForm) }}
         </div>
+    </div>
 {% endblock %}

@@ -28,7 +28,7 @@ h1{
     font-weight: bold;
     font-size: 70px;
     color: blue;
-    margin: 50px;
+    margin: 30px;
 }
 
 h2{
@@ -46,6 +46,7 @@ a:hover{
 }
 
 .btn{
+    margin: 15Px;
     position: center;
 }
 
@@ -63,7 +64,25 @@ footer {
     margin-bottom: 0;
 }
 
-#formulaire{
-    width: 70%;
+
+.form-check{
+    display: block;
+    position: relative;
+    margin: 10Px;
+    float: left;
+    text-align: left;
+}
+
+.date{
+    margin: 15px;
+    position: relative;
+}
+
+form{
+    width: 600px;
     margin: auto;
+}
+
+#bouton{
+    float: left;
 }
