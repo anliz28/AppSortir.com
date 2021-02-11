@@ -223,7 +223,7 @@ class SortieController extends AbstractController
             $sortie->setEtat(6);
             $em->persist($sortie);
             $em->flush();
-            } else{
+        } else{
             $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir la publier");
             return $this->render('sortie/detail.html.twig', [
                 "sortie" => $sortie,
@@ -234,6 +234,7 @@ class SortieController extends AbstractController
             'sorties' => $em->getRepository(Sortie::class)->findAll()
         ]);
     }
+
 
 }
 
