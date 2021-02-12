@@ -37,7 +37,7 @@ class InscriptionController extends AbstractController
             foreach ($inscriptions as $inscription) {
                 array_push($participants, $inscription->getParticipant());
             }
-            $this->addFlash('error', 'Cette sortie n\'est pas ouverte aux inscirptions');
+            $this->addFlash('error', 'Cette sortie n\'est pas ouverte aux inscriptions');
             return $this->render("sortie/detail.html.twig", ['participants' => $participants, 'sortie' => $sortie]);
         }
         //je compte le nombre d'inscrits à la sortie avec ma requête queryBuilder
@@ -134,9 +134,8 @@ class InscriptionController extends AbstractController
             $inscriptionRepo = $em->getRepository(Inscriptions::class)->findBy(array("participant" => $participant, "sortie" => $sortie), [], 1, 0);
 
             //sélection de l'inscription
-
             $inscription = $inscriptionRepo[0];
-            dump($inscription);
+
 
             //suppression de l'inscription
             $em->remove($inscription);
