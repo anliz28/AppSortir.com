@@ -4,6 +4,8 @@
 namespace App\Controller;
 
 
+use App\Entity\Inscriptions;
+use App\Entity\Participants;
 use App\Entity\Sortie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +33,13 @@ class SecurityController extends AbstractController
 
         if($this->isGranted('IS_AUTHENTICATED_FULLY')){
 
-            return $this->render('main/home.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
+            $sorties = $em->getRepository(Sortie::class)->findAll();
+            $inscriptions = $em->getRepository(Inscriptions::class)->findAll();
+
+
+            return $this->render('main/home.html.twig',['sorties' => $sorties,
+                'participants' => $inscriptions
+            ]);
         }else{
              return $this->render('participants/login.html.twig',
             [

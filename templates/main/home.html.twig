@@ -77,29 +77,46 @@
             <th scope="col">Clôture</th>
             <th scope="col">inscrits/places</th>
             <th scope="col">Etat</th>
-            <th scope="col">Inscrit</th>
+            <th scope="col">Participants</th>
             <th scope="col">Organisateur</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
+
         {% for sortie in sorties %}
+
             <tr>
                 <td><a href="{{ path('sortie_detail',{'id':sortie.id}) }}"> {{ sortie.nom }}</a></td>
                 <td>{{ sortie.dateDebut | date('Y-m-d H:i:s') }}</td>
                 <td>{{ sortie.dateCloture | date('Y-m-d H:i:s')}}</td>
                 <td>{{ sortie.inscriptions.count }}/{{ sortie.nbInscriptionsMax}} </td>
                 <td>{{ sortie.Etat}}</td>
-                <td>inscrit/pas inscrit : à faire</td>
-                <td><a href="{{ path('profilParticipant',{'id':sortie.organisateur.id}) }}"> {{ sortie.organisateur.pseudo}}</a></td>
-                <td><a href="{{path('sortie_publier',{'id':sortie.id})}}">publier</a><a href="{{path('sortie_modifier',{'id':sortie.id})}}">modifier</a><a href="{{path('sortie_annuler',{'id':sortie.id})}}">annuler</a></td>
+                <td>
+                    <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">inscriptions</a>
+
+                     {# if(sortie.id in app.user.inscriptions.get(['sortie_id'], sortie.id)) #}
+                    {# if(sortie.inscriptions.matching("['participant_id'] == app.user.id")) #}
+
+                </td>
+                                <td>
+                    <a href="{{ path('profilParticipant',{'id':sortie.organisateur.id}) }}"> {{ sortie.organisateur.pseudo}}</a></td>
+                <td>
+                    {% if (sortie.organisateur.id == app.user.id) %}
+                    <a href="{{path('sortie_publier',{'id':sortie.id})}}">publier</a><a href="{{path('sortie_modifier',{'id':sortie.id})}}">modifier</a><a href="{{path('sortie_annuler',{'id':sortie.id})}}">annuler</a></td>
+                    {% else %}
+                        <a href="{{ path('sortie_detail',{'id':sortie.id}) }}"> Afficher </a>
+                {% endif %}
             </tr>
         {% endfor %}
 
         </tbody>
     </table>
 
+
+
+
     <a href="{{ path('sortie_add') }}" type="submit" class="btn btn-info">Créer une sortie</a>
 
-{% endblock %}
+        {% endblock %}
 

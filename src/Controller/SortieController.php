@@ -161,6 +161,15 @@ class SortieController extends AbstractController
         $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
         $sortie = $sortieRepo->find($id);
 
+        //récupérer la liste des participants
+        //Fait le lien entre l'entité inscription pour récupérer mes participants
+        $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+        $participants = [];
+        foreach ($inscriptions as $inscription) {
+            array_push($participants, $inscription->getParticipant());
+        }
+
         if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
         }
@@ -214,9 +223,18 @@ class SortieController extends AbstractController
 
         //contrôler que le user est bien l'organisateur
         $organisateur_id = $sortie->getOrganisateur()->getId();
+
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
-        $participants = $sortie->getInscription()->getParticipant();
+
+        //récupérer la liste des participants
+        //Fait le lien entre l'entité inscription pour récupérer mes participants
+        $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+        $participants = [];
+        foreach ($inscriptions as $inscription) {
+            array_push($participants, $inscription->getParticipant());
+        }
 
         if ($organisateur_id <> $user_id) {
             //modification de l'etat

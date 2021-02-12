@@ -125,7 +125,7 @@ class Participants implements UserInterface
     /**
      * @return ArrayCollection
      */
-    public function getInscriptions(): ArrayCollection
+    public function getInscriptions()
     {
         return $this->inscriptions;
     }

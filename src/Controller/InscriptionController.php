@@ -149,4 +149,5 @@ class InscriptionController extends AbstractController
     }
 
 
+
 }
