@@ -227,7 +227,13 @@ class SortieController extends AbstractController
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
 
-        //récupérer la liste des participants
+
+        if ($organisateur_id == $user_id) {
+            //modification de l'etat
+            $sortie->setEtat(6);
+            $em->persist($sortie);
+            $em->flush();
+
         //Fait le lien entre l'entité inscription pour récupérer mes participants
         $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
 
@@ -236,13 +242,8 @@ class SortieController extends AbstractController
             array_push($participants, $inscription->getParticipant());
         }
 
-        if ($organisateur_id <> $user_id) {
-            //modification de l'etat
-            $sortie->setEtat(6);
-            $em->persist($sortie);
-            $em->flush();
         } else{
-            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir la publier");
+            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir l'annuler'");
             return $this->render('sortie/detail.html.twig', [
                 "sortie" => $sortie,
                 'participants' => $participants
