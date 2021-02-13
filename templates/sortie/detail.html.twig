@@ -15,8 +15,7 @@
             <p><strong>Ville : </strong>{{ sortie.lieu }}</p>
 
     </div>
-        <a href="{{ path('sortie_modifier',{'id': sortie.id}) }}" class="btn btn-info">Modifier la sortie</a>
-        <a href="{{ path('sortie_annuler',{'id': sortie.id}) }}" class="btn btn-info">Annuler la sortie</a>
+
         <a href="{{ path('inscrire',{'id': sortie.id}) }}" class="btn btn-info">S'inscrire</a>
         <a href="{{ path('sortie_desinscrire',{'id': sortie.id}) }}" class="btn btn-info">Se désinscrire</a>
     </div>

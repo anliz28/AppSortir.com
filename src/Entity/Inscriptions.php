@@ -65,7 +65,7 @@ class Inscriptions
         return $this;
     }
 
-    public function getParticipant(): ?Participants
+    public function getParticipant(): Participants
     {
         return $this->participant;
     }

@@ -8,64 +8,34 @@
 
 <div>
     <h3>Rechercher des sorties</h3>
-    <form method="GET">
+    <form method="GET" action="{{ path('findForm') }}">
 
         <div class="form-group">
             <label for="exampleFormControlSelect1">Campus</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>Nantes</option>
-                <option>Saint-Herblain</option>
-                <option>Rennes</option>
-                <option>La Roche sur Yon</option>
-                <option>Chartre De Bretagne</option>
+            <select class="form-control" id="exampleFormControlSelect1" name="campus">
+                {% for campu in campus %}
+                    <option value="{{ campu.id }}">{{ campu.nomCampus }}</option>
+                {% endfor %}
             </select>
         </div>
         <div>
-        <input class="form-control mr-sm-2" type="search" placeholder="recherche par mots clés" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="recherche par mots clés" name="recherche" aria-label="Search">
         </div>
 
         <div class="date">
         <label for="start">A partir de: </label>
-
-        <input type="date" id="start" name="trip-start"
+        <input type="date" id="start" name="start"
                value="2018-07-22"
                min="2018-01-01" max="2018-12-31">
         </div>
         <div class="date">
         <label for="end">Jusqu'à:  </label>
-
-        <input type="date" id="end" name="trip-start"
+        <input type="date" id="end" name="end"
                value="2018-07-22"
                min="2018-01-01" max="2018-12-31">
         </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="organisateur">
-            <label class="form-check-label" for="organisateur">
-                Sorties dont je suis l'organisateur/trice
-            </label>
-        </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="inscrit">
-            <label class="form-check-label" for="inscrit">
-                Sorties auxquelles je suis inscrit/e
-            </label>
-        </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="pasInscrit">
-            <label class="form-check-label" for="pasInscrit">
-                Sorties auxquelles je ne suis pas inscrit/e
-            </label>
-        </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="sortiePassé">
-            <label class="form-check-label" for="sortiePassé">
-                Sorties passées
-            </label>
-
-        </div>
 
         <button type="submit" class="btn btn-info" id="bouton">Rechercher</button>
-
     </form>
 </div>
 
@@ -89,10 +59,12 @@
                 <td>{{ sortie.dateDebut | date('Y-m-d H:i:s') }}</td>
                 <td>{{ sortie.dateCloture | date('Y-m-d H:i:s')}}</td>
                 <td>{{ sortie.inscriptions.count }}/{{ sortie.nbInscriptionsMax}} </td>
-                <td>{{ sortie.Etat}}</td>
-                <td>inscrit/pas inscrit : à faire</td>
+                <td>{% if sortie.etat is same as 2 %}<p>Ouverte</p>{% elseif sortie.etat is same as 1 %}<p>Créée</p>{% elseif sortie.etat is same as 6 %}<p>Annulée</p>{% elseif sortie.etat is same as 4 %}<p>Activitée en cours</p>{% elseif sortie.etat is same as 3 %}<p>Clôturée</p>{% elseif sortie.etat is same as 5 %}<p>Passée</p>{% endif %}</td>
+                <td><a href="{{ path('sortie_detail',{'id':sortie.id}) }}">inscriptions</a></td>
                 <td><a href="{{ path('profilParticipant',{'id':sortie.organisateur.id}) }}"> {{ sortie.organisateur.pseudo}}</a></td>
-                <td><a href="{{path('sortie_publier',{'id':sortie.id})}}">publier</a><a href="{{path('sortie_modifier',{'id':sortie.id})}}">modifier</a><a href="{{path('sortie_annuler',{'id':sortie.id})}}">annuler</a></td>
+                {% if(app.user is same as(sortie.organisateur)) %}<td><a href="{{path('sortie_publier',{'id':sortie.id})}}">publier</a><a href="{{path('sortie_modifier',{'id':sortie.id})}}">modifier</a><a href="{{path('sortie_annuler',{'id':sortie.id})}}">annuler</a></td>{% else %}
+                    <td><a href="{{ path('sortie_detail',{'id':sortie.id}) }}"> Afficher </a></td>
+                {% endif %}
             </tr>
         {% endfor %}
 

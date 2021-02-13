@@ -4,6 +4,9 @@
 namespace App\Controller;
 
 
+use App\Entity\Sortie;
+use App\Repository\CampusRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,18 +25,20 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authentif
      * @return Response
      */
-    public function login(AuthenticationUtils $authentif): Response
+    public function login(EntityManagerInterface $em, AuthenticationUtils $authentif,CampusRepository $campusRepository): Response
     {
         $error = $authentif->getLastAuthenticationError();
         $lastUserName = $authentif->getLastUsername();
 
         if($this->isGranted('IS_AUTHENTICATED_FULLY')){
-            return $this->render('main/home.html.twig');
+            $sortie = $em->getRepository(Sortie::class)->findAll();
+            return $this->render('main/home.html.twig', ['sorties'=>$sortie,  'campus' => $campusRepository->findAll()]);
         }else{
              return $this->render('participants/login.html.twig',
             [
                 'last_username' => $lastUserName,
-                'error'=> $error
+                'error'=> $error,
+
             ]
         );}
     }

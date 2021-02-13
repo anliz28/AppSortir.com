@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Participants;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +21,70 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+
+    function findSearch($filter, Participants $participants)
+    {
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s')
+            ->join('s.inscriptions', 'i');
+
+
+        /*if (!empty($filter->organisateur)) {
+            $query
+                ->join('s.inscription', 'i')
+        }*/
+
+        // if(!empty($filter->recherche)) {
+        // $query = $query
+        //->andWhere('recherche= :recherche’)
+        //  ->setParameter(':recherche',$filter->recherche);
+        //  }
+
+        /*if (!empty($filter->start)) {
+            $query = $query
+                ->andWhere('start= :start')
+                ->setParameter(':start', $filter->start);
+        }
+
+        if (!empty($filter->end)) {
+            $query = $query
+                ->andWhere('s.end= :end')
+                ->setParameter(':end', $filter->end);
+        }
+
+
+        if (!empty($filter->organisateur)) {
+            $query = $query
+                ->andWhere('s.organisateur= :organisateur)')
+                ->setParameter('organisateur', $filter->organisateur);
+
+
+            if (!empty($filter->inscrit)) {
+                $query = $query
+                    ->andWhere('s.inscrit = :inscrit')
+                    ->setParameter('inscrit', $filter->inscrit);
+            }
+
+            if (!empty($filter->pasInscrit)) {
+                $query = $query
+                    ->andWhere('s.pasInscrit = :pasInscrit')
+                    ->setParameter('pasInscrit', $filter->pasInscrit);
+            }
+
+
+            if (!empty($filter->sortiePassee)) {
+                $query = $query
+                    ->andWhere('s.sortiePassee = :sortiePassee')
+                    ->setParameter('sortiePassee', $filter->sortiePassee);
+            }
+        }*/
+
+
+        return $query->getQuery()->getResult();
+    }
+
+}
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */
@@ -47,4 +113,4 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
     */
-}
+
