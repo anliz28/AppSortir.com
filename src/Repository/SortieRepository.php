@@ -6,6 +6,8 @@ use App\Entity\Participants;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 
 
 /**
@@ -21,13 +23,13 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-
     function findSearch($filter, Participants $participants)
     {
         $query = $this
             ->createQueryBuilder('s')
             ->select('s')
             ->join('s.inscriptions', 'i');
+
 
 
         /*if (!empty($filter->organisateur)) {
@@ -84,7 +86,28 @@ class SortieRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+
+
+
+    function findSortieActives(UserInterface $user)
+    {
+        $dateDuJour = new \DateTime();
+        $dateArchivage = $dateDuJour->modify("- 1 month");
+
+
+        $query = $this->createQueryBuilder('s');
+        $query->where('s.dateDebut > :dateArchivage');
+        $query->andWhere('s.etat > 1');
+        $query->orWhere('s.etat>0 and s.organisateur = :user');
+        //$query->andWhere('s.organisateur = :user');
+        $query->setParameter('dateArchivage', $dateArchivage);
+        $query->setParameter('user', $user);
+        $query = $query->getQuery();
+
+        return $query->getResult();
+
 }
+
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
     //  */
@@ -113,4 +136,6 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
     */
+
+}
 

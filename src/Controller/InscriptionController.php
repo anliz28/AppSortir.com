@@ -37,7 +37,7 @@ class InscriptionController extends AbstractController
             foreach ($inscriptions as $inscription) {
                 array_push($participants, $inscription->getParticipant());
             }
-            $this->addFlash('error', 'Cette sortie n\'est pas ouverte aux inscirptions');
+            $this->addFlash('error', 'Cette sortie n\'est pas ouverte aux inscriptions');
             return $this->render("sortie/detail.html.twig", ['participants' => $participants, 'sortie' => $sortie]);
         }
         //je compte le nombre d'inscrits à la sortie avec ma requête queryBuilder
@@ -115,8 +115,10 @@ class InscriptionController extends AbstractController
         //récupération du user courant
         $participant = $this->getUser();
         $dateDuJour = new \DateTime();
-        $dateDebut = $sortie->getDateDebut();
 
+        $dateDebut = $sortie->getDateDebut();
+        dump($sortie);
+        dump($participant);
         //contrôle du non commencement de la sortie
         if($dateDebut < $dateDuJour){
 
@@ -129,12 +131,11 @@ class InscriptionController extends AbstractController
             }
         }else {
 
-            //recherche de l'inscription à supprimer
             $inscriptionRepo = $em->getRepository(Inscriptions::class)->findBy(array("participant" => $participant, "sortie" => $sortie), [], 1, 0);
 
             //sélection de l'inscription
-
             $inscription = $inscriptionRepo[0];
+
 
             //suppression de l'inscription
             $em->remove($inscription);
@@ -142,8 +143,11 @@ class InscriptionController extends AbstractController
 
             $this->addFlash('success', "Vous avez bien été désinscrit");
         }
-            return $this->render("main/home.html.twig");
+        return $this->render('main/home.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
 
-        }
+
+    }
+
+
 
 }

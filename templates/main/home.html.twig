@@ -47,17 +47,19 @@
             <th scope="col">Clôture</th>
             <th scope="col">inscrits/places</th>
             <th scope="col">Etat</th>
-            <th scope="col">Inscrit</th>
+            <th scope="col">Participants</th>
             <th scope="col">Organisateur</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for sortie in sorties %}
+
+        {% for sortie in sortiesActives %}
+
             <tr>
                 <td><a href="{{ path('sortie_detail',{'id':sortie.id}) }}"> {{ sortie.nom }}</a></td>
-                <td>{{ sortie.dateDebut | date('Y-m-d H:i:s') }}</td>
-                <td>{{ sortie.dateCloture | date('Y-m-d H:i:s')}}</td>
+                <td>{{ sortie.dateDebut | date('Y/m/d H:i') }}</td>
+                <td>{{ sortie.dateCloture | date('Y/m/d H:i')}}</td>
                 <td>{{ sortie.inscriptions.count }}/{{ sortie.nbInscriptionsMax}} </td>
                 <td>{% if sortie.etat is same as 2 %}<p>Ouverte</p>{% elseif sortie.etat is same as 1 %}<p>Créée</p>{% elseif sortie.etat is same as 6 %}<p>Annulée</p>{% elseif sortie.etat is same as 4 %}<p>Activitée en cours</p>{% elseif sortie.etat is same as 3 %}<p>Clôturée</p>{% elseif sortie.etat is same as 5 %}<p>Passée</p>{% endif %}</td>
                 <td><a href="{{ path('sortie_detail',{'id':sortie.id}) }}">inscriptions</a></td>
@@ -73,5 +75,5 @@
 
     <a href="{{ path('sortie_add') }}" type="submit" class="btn btn-info">Créer une sortie</a>
 
-{% endblock %}
+        {% endblock %}
 

@@ -4,6 +4,8 @@
 namespace App\Controller;
 
 
+
+use App\Entity\Inscriptions;
 use App\Entity\Sortie;
 use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,15 +27,17 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authentif
      * @return Response
      */
-    public function login(EntityManagerInterface $em, AuthenticationUtils $authentif,CampusRepository $campusRepository): Response
+    public function login(AuthenticationUtils $authentif, EntityManagerInterface $em, CampusRepository $campusRepository): Response
     {
         $error = $authentif->getLastAuthenticationError();
         $lastUserName = $authentif->getLastUsername();
 
         if($this->isGranted('IS_AUTHENTICATED_FULLY')){
             $sortie = $em->getRepository(Sortie::class)->findAll();
-            return $this->render('main/home.html.twig', ['sorties'=>$sortie,  'campus' => $campusRepository->findAll()]);
-        }else{
+            $inscriptions = $em->getRepository(Inscriptions::class)->findAll();
+            return $this->render('main/home.html.twig', ['sorties'=>$sortie,  'campus' => $campusRepository->findAll(),'participants' => $inscriptions,]);
+
+             }else{
              return $this->render('participants/login.html.twig',
             [
                 'last_username' => $lastUserName,

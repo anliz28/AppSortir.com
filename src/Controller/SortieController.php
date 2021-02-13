@@ -21,6 +21,7 @@ class SortieController extends AbstractController
      */
     public function listSortie (CampusRepository $campusRepository)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         return $this->render('main/home.html.twig',[
@@ -29,30 +30,6 @@ class SortieController extends AbstractController
         ]);
     }
 
-
-    /**
-     * @Route("sortie/home", name="findForm", methods={"GET"})
-     */
-    public function findOrganisateur(Request $request, CampusRepository $campusRepository){
-
-        $sorties = $this->getDoctrine()->getRepository(Sortie::class);
-        $filter = $request->query->all();
-        $findForm = $sorties->findSearch($filter, $this->getUser());
-        foreach ($findForm as $item) {
-           $inscrit = $item->getInscriptions();
-        };
-        $em = $this->getDoctrine()->getManager();
-
-        return $this->render('main/home.html.twig',
-            [
-                'sorties' => $findForm,
-                'campus' => $campusRepository->findAll(),
-                'inscrit'=> $inscrit
-            ]
-        );
-
-
-    }
 
 
     //méthode pour créer une nouvelle sortie
@@ -177,7 +154,8 @@ class SortieController extends AbstractController
 
             return $this->render('sortie/modifier.html.twig', [
                 "sortieModifForm" => $sortieModifForm->createView(),
-                "sortie" => $sortie, 'participants'=> $participants
+                "sortie" => $sortie, 'participants'=> $participants,
+                'campus' => $campusRepository
             ]);
         }
     }
@@ -191,6 +169,15 @@ class SortieController extends AbstractController
         //recherche en bdd
         $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
         $sortie = $sortieRepo->find($id);
+
+        //récupérer la liste des participants
+        //Fait le lien entre l'entité inscription pour récupérer mes participants
+        $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+        $participants = [];
+        foreach ($inscriptions as $inscription) {
+            array_push($participants, $inscription->getParticipant());
+        }
 
         if (empty($sortie)) {
             throw $this->createNotFoundException("Cette sortie n'existe pas");
@@ -221,14 +208,18 @@ class SortieController extends AbstractController
             $sortie->setEtat(2);
             $em->persist($sortie);
             $em->flush();
-
+            $user = $this->getUser();
+            $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
             $this->addFlash('success', 'La sortie a bien été publiée');
             return $this->render('main/home.html.twig', [
                 'sorties' => $em->getRepository(Sortie::class)->findAll(),
-                'campus' => $campusRepository->findAll()
+                'campus' => $campusRepository,
+                'sortiesActives' => $sortiesActives
+
             ]);
         }
     }
+
 
     //méthode pour modifier l'état d'une sortie en "annulée"
     /**
@@ -248,9 +239,20 @@ class SortieController extends AbstractController
         $organisateur_id = $sortie->getOrganisateur()->getId();
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
+
         $participants = $sortie->getInscriptions()->getParticipant();
 
-        if ($organisateur_id <> $user_id) {
+
+        //récupérer la liste des participants
+        //Fait le lien entre l'entité inscription pour récupérer mes participants
+        $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
+
+        $participants = [];
+        foreach ($inscriptions as $inscription) {
+            array_push($participants, $inscription->getParticipant());
+        }
+
+        if ($organisateur_id == $user_id) {
             //modification de l'etat
             $sortie->setEtat(6);
             $em->persist($sortie);
@@ -262,11 +264,38 @@ class SortieController extends AbstractController
                 'participants' => $participants
             ]);
         }
+        $user = $this->getUser();
+        $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
         return $this->render('main/home.html.twig', [
             'sorties' => $em->getRepository(Sortie::class)->findAll(),
-            'campus' => $campusRepository->findAll()
+            'campus' => $campusRepository->findAll(),
+            'sortiesActives' => $sortiesActives
+
         ]);
     }
+
+
+    /**
+     * @Route("sortie/home", name="findForm", methods={"GET"})
+     */
+    public function findOrganisateur(Request $request, CampusRepository $campusRepository){
+
+    $sorties = $this->getDoctrine()->getRepository(Sortie::class);
+    $filter = $request->query->all();
+    $findForm = $sorties->findSearch($filter, $this->getUser());
+
+    $em = $this->getDoctrine()->getManager();
+    $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives();
+    return $this->render('main/home.html.twig',
+        [
+            'sorties' => $findForm,
+            'campus' => $campusRepository->findAll(),
+            'sortiesActives' => $sortiesActives
+        ]
+    );
+
+
+}
 
 
 }
