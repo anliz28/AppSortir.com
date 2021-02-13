@@ -24,12 +24,12 @@ class SortieController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-       // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
+        $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
         $sorties = $em->getRepository(Sortie::class)->findAll();
 
         return $this->render('main/home.html.twig',['sorties' => $sorties,
             'campus' => $campusRepository,
-            //'sortiesActives' => $sortiesActives
+            'sortiesActives' => $sortiesActives
         ]);
     }
 
@@ -209,12 +209,13 @@ class SortieController extends AbstractController
             $sortie->setEtat(2);
             $em->persist($sortie);
             $em->flush();
-            // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
+            $user = $this->getUser();
+            $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
             $this->addFlash('success', 'La sortie a bien été publiée');
             return $this->render('main/home.html.twig', [
                 'sorties' => $em->getRepository(Sortie::class)->findAll(),
-                'campus' => $campusRepository
-               // 'sortiesActives' => $sortiesActives
+                'campus' => $campusRepository,
+                'sortiesActives' => $sortiesActives
             ]);
         }
     }
@@ -260,10 +261,11 @@ class SortieController extends AbstractController
                 'participants' => $participants
             ]);
         }
-        // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
+        $user = $this->getUser();
+        $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
         return $this->render('main/home.html.twig', [
-            'sorties' => $em->getRepository(Sortie::class)->findAll()
-            //,'sortiesActives' => $sortiesActives
+            'sorties' => $em->getRepository(Sortie::class)->findAll(),
+            'sortiesActives' => $sortiesActives
         ]);
     }
 
@@ -278,12 +280,12 @@ class SortieController extends AbstractController
     $findForm = $sorties->findSearch($filter, $this->getUser());
 
     $em = $this->getDoctrine()->getManager();
-    // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
+    $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives();
     return $this->render('main/home.html.twig',
         [
             'sorties' => $findForm,
-            'campus' => $campusRepository->findAll()
-    //, 'sortiesActives' => $sortiesActives
+            'campus' => $campusRepository->findAll(),
+            'sortiesActives' => $sortiesActives
         ]
     );
 
