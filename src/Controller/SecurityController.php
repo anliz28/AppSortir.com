@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Inscriptions;
 use App\Entity\Participants;
 use App\Entity\Sortie;
+use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,7 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authentif
      * @return Response
      */
-    public function login(AuthenticationUtils $authentif, EntityManagerInterface $em): Response
+    public function login(AuthenticationUtils $authentif, EntityManagerInterface $em, CampusRepository $campusRepository): Response
     {
         $error = $authentif->getLastAuthenticationError();
         $lastUserName = $authentif->getLastUsername();
@@ -36,9 +37,9 @@ class SecurityController extends AbstractController
             $sorties = $em->getRepository(Sortie::class)->findAll();
             $inscriptions = $em->getRepository(Inscriptions::class)->findAll();
 
-
             return $this->render('main/home.html.twig',['sorties' => $sorties,
-                'participants' => $inscriptions
+                'participants' => $inscriptions,
+
             ]);
         }else{
              return $this->render('participants/login.html.twig',

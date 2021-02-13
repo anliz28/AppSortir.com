@@ -8,7 +8,7 @@
 
 <div>
     <h3>Rechercher des sorties</h3>
-    <form method="GET">
+    <form method="GET" action="{{ path('findForm') }}">
 
         <div class="form-group">
             <label for="exampleFormControlSelect1">Campus</label>
@@ -38,31 +38,7 @@
                value="2018-07-22"
                min="2018-01-01" max="2018-12-31">
         </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="organisateur">
-            <label class="form-check-label" for="organisateur">
-                Sorties dont je suis l'organisateur/trice
-            </label>
-        </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="inscrit">
-            <label class="form-check-label" for="inscrit">
-                Sorties auxquelles je suis inscrit/e
-            </label>
-        </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="pasInscrit">
-            <label class="form-check-label" for="pasInscrit">
-                Sorties auxquelles je ne suis pas inscrit/e
-            </label>
-        </div>
-        <div class="form-check col-8">
-            <input class="form-check-input" type="checkbox" value="" id="sortiePassé">
-            <label class="form-check-label" for="sortiePassé">
-                Sorties passées
-            </label>
 
-        </div>
 
         <button type="submit" class="btn btn-info" id="bouton">Rechercher</button>
 
@@ -88,16 +64,28 @@
 
             <tr>
                 <td><a href="{{ path('sortie_detail',{'id':sortie.id}) }}"> {{ sortie.nom }}</a></td>
-                <td>{{ sortie.dateDebut | date('Y-m-d H:i:s') }}</td>
-                <td>{{ sortie.dateCloture | date('Y-m-d H:i:s')}}</td>
+                <td>{{ sortie.dateDebut | date('d_m-Y H:i:s') }}</td>
+                <td>{{ sortie.dateCloture | date('d-m-Y H:i:s')}}</td>
                 <td>{{ sortie.inscriptions.count }}/{{ sortie.nbInscriptionsMax}} </td>
-                <td>{{ sortie.Etat}}</td>
+                <td>
+
+                    {% if sortie.etat == 1 %}
+                    <p>Créée<p>
+                        {% endif %}
+                        {% if sortie.etat == 2 %}
+                        <p>Ouverte<p>
+                        {% endif %}
+                        {% if sortie.etat == 6 %}
+                        <p>Annulée<p>
+                        {% endif %}
+
+
+
+
                 <td>
                     <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">inscriptions</a>
-
-
                 </td>
-                                <td>
+                <td>
                     <a href="{{ path('profilParticipant',{'id':sortie.organisateur.id}) }}"> {{ sortie.organisateur.pseudo}}</a></td>
                 <td>
                     {% if (sortie.organisateur.id == app.user.id) %}

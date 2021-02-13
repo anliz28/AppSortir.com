@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Participants;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,6 +19,28 @@ class SortieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Sortie::class);
     }
+
+    function findSearch($filter, Participants $participants)
+    {
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s')
+            ->join('s.inscriptions', 'i');
+    }
+/**
+    function findSortieActives()
+    {
+        $dateDuJour = new \DateTime();
+
+            $query = $this->createQueryBuilder('s');
+              $query->andWhere(':dateEtatPassee >= :dateDuJour' );
+              $query->setParameter('dateEtatPassee','s.dateDebut->modify("- 1month")');
+                $query->setParameter('dateDuJour',$dateDuJour);
+              $query = $query->getQuery();
+
+              return $query->getResult();
+    }
+ * /
 
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects

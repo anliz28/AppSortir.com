@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Inscriptions;
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,18 @@ class SortieController extends AbstractController
     /**
      * @Route("main/home", name="home")
      */
-    public function listSortie ()
+    public function listSortie (CampusRepository $campusRepository)
     {
+
         $em = $this->getDoctrine()->getManager();
-        return $this->render('main/home.html.twig',['sorties' => $em->getRepository(Sortie::class)->findAll()]);
+        $user = $this->getUser();
+       // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
+        $sorties = $em->getRepository(Sortie::class)->findAll();
+
+        return $this->render('main/home.html.twig',['sorties' => $sorties,
+            'campus' => $campusRepository,
+            //'sortiesActives' => $sortiesActives
+        ]);
     }
 
 
@@ -87,7 +96,7 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/modifier/{id}", name="sortie_modifier", requirements={"id":"\d+"})
      */
-    public function modifier($id, Request $request, EntityManagerInterface $em): Response
+    public function modifier($id, Request $request, EntityManagerInterface $em, CampusRepository $campusRepository): Response
     {
 
         //récupérer la sortie en bdd
@@ -146,7 +155,8 @@ class SortieController extends AbstractController
 
             return $this->render('sortie/modifier.html.twig', [
                 "sortieModifForm" => $sortieModifForm->createView(),
-                "sortie" => $sortie, 'participants'=> $participants
+                "sortie" => $sortie, 'participants'=> $participants,
+                'campus' => $campusRepository
             ]);
         }
     }
@@ -155,7 +165,7 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/publier/{id}", name="sortie_publier", requirements={"id":"\d+"}, methods={"GET"})
      */
-    public function publier($id, EntityManagerInterface $em): Response
+    public function publier($id, EntityManagerInterface $em, CampusRepository $campusRepository): Response
     {
         //recherche en bdd
         $sortieRepo = $this->getDoctrine()->getRepository(Sortie::class);
@@ -199,13 +209,16 @@ class SortieController extends AbstractController
             $sortie->setEtat(2);
             $em->persist($sortie);
             $em->flush();
-
+            // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
             $this->addFlash('success', 'La sortie a bien été publiée');
             return $this->render('main/home.html.twig', [
-                'sorties' => $em->getRepository(Sortie::class)->findAll()
+                'sorties' => $em->getRepository(Sortie::class)->findAll(),
+                'campus' => $campusRepository
+               // 'sortiesActives' => $sortiesActives
             ]);
         }
     }
+
 
     //méthode pour modifier l'état d'une sortie en "annulée"
     /**
@@ -223,17 +236,10 @@ class SortieController extends AbstractController
 
         //contrôler que le user est bien l'organisateur
         $organisateur_id = $sortie->getOrganisateur()->getId();
-
         //récupérer le user connecté
         $user_id = $this->getUser()->getId();
 
-
-        if ($organisateur_id == $user_id) {
-            //modification de l'etat
-            $sortie->setEtat(6);
-            $em->persist($sortie);
-            $em->flush();
-
+        //récupérer la liste des participants
         //Fait le lien entre l'entité inscription pour récupérer mes participants
         $inscriptions = $this->getDoctrine()->getRepository(Inscriptions::class)->findBySortie($sortie);
 
@@ -242,17 +248,47 @@ class SortieController extends AbstractController
             array_push($participants, $inscription->getParticipant());
         }
 
+        if ($organisateur_id == $user_id) {
+            //modification de l'etat
+            $sortie->setEtat(6);
+            $em->persist($sortie);
+            $em->flush();
         } else{
-            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir l'annuler'");
+            $this->addFlash('error', "Vous devez être l'organisateur de cette sortie pour pouvoir la publier");
             return $this->render('sortie/detail.html.twig', [
                 "sortie" => $sortie,
                 'participants' => $participants
             ]);
         }
+        // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
         return $this->render('main/home.html.twig', [
             'sorties' => $em->getRepository(Sortie::class)->findAll()
+            //,'sortiesActives' => $sortiesActives
         ]);
     }
+
+
+    /**
+     * @Route("sortie/home", name="findForm", methods={"GET"})
+     */
+    public function findOrganisateur(Request $request, CampusRepository $campusRepository){
+
+    $sorties = $this->getDoctrine()->getRepository(Sortie::class);
+    $filter = $request->query->all();
+    $findForm = $sorties->findSearch($filter, $this->getUser());
+
+    $em = $this->getDoctrine()->getManager();
+    // $sortiesActives = $em->getRepository(Sortie::class)->findSortieActives($user);
+    return $this->render('main/home.html.twig',
+        [
+            'sorties' => $findForm,
+            'campus' => $campusRepository->findAll()
+    //, 'sortiesActives' => $sortiesActives
+        ]
+    );
+
+
+}
 
 
 }
